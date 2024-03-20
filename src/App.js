@@ -1,14 +1,11 @@
-import './App.scss';
-import React from 'react';
-import NavBar from './components/NavBar/NavBar';
+import './App.scss'
+import React from 'react'
+import NavBar from './components/NavBar/NavBar'
 import Home from './pages/Homepage'
-import Container from 'react-bootstrap/Container'
-import Row from 'react-bootstrap/Row'
-import Col from 'react-bootstrap/Col'
 
 function App() {
   return (
-    <div style={{display: 'flex'}}>
+    <div className="app-container">
       <NavBar 
         li={[
           ["Home", "img/home.svg"],
@@ -17,7 +14,9 @@ function App() {
           ["Financial", "img/financial.svg"]
         ]}
       />
-      <Home />
+      <div className="main-content">
+        <Home width="1000px"/>
+      </div>
     </div>
   );
 }

@@ -5,3 +5,17 @@
   padding:0px;
   padding-left: 0px;
 }
+
+.app-container {
+  display: flex; /* Use flexbox */
+}
+
+.navbar {
+  width: 200px; /* Set width of the navbar */
+  flex-shrink: 0; /* Prevent navbar from shrinking */
+}
+
+.main-content {
+  flex-grow: 1; /* Allow main content to grow and take up remaining space */
+  overflow-x: hidden; /* Hide overflow to prevent horizontal scrolling */
+}
