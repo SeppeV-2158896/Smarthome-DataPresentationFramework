@@ -1,24 +1,38 @@
 import './App.scss'
-import React from 'react'
+import React, {Component} from 'react'
 import NavBar from './components/NavBar/NavBar'
 import Home from './pages/Homepage'
+import * as ReactDOM from 'react-dom/client'
+import { Element } from 'chart.js'
 
-function App() {
-  return (
-    <div className="app-container">
-      <NavBar 
-        li={[
-          ["Home", "img/home.svg"],
-          ["Household", "img/household.svg"],
-          ["Technical", "img/technical.svg"],
-          ["Financial", "img/financial.svg"]
-        ]}
-      />
-      <div className="main-content">
-        <Home width="1000px"/>
+class App extends Component {
+  constructor(props){
+    super(props);
+    
+  }
+  
+  componentDidMount(){
+    const rootElement = document.getElementById("main-content")
+    const root = ReactDOM.createRoot(rootElement);
+
+    root.render(<Home id='home' width="1000px"/>);
+  }
+ 
+  render(){
+    return (
+      <div id='main' className="app-container">
+        <NavBar 
+          li={[
+            ["Home", "img/home.svg"],
+            ["Household", "img/household.svg"],
+            ["Technical", "img/technical.svg"],
+            ["Financial", "img/financial.svg"]
+          ]}
+        />
+        <section id='main-content' className="main-content" ></section>
       </div>
-    </div>
-  );
+    );
+  }
 }
 
 export default App;

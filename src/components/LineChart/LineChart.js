@@ -1,6 +1,8 @@
 import React, { useEffect } from 'react';
 import { useState } from 'react';
 import zoomPlugin from 'chartjs-plugin-zoom'
+import 'chartjs-adapter-spacetime'
+
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -11,6 +13,7 @@ import {
   Tooltip,
   Legend,
   Filler,
+  TimeScale,
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
 
@@ -24,6 +27,7 @@ ChartJS.register(
   Legend,
   Filler,
   zoomPlugin,
+  TimeScale
 );
 
 function LineChart(input) {
@@ -32,7 +36,7 @@ function LineChart(input) {
     datasets: [],
   });
 
-  const [chartOptions, setChartOptions] = useState({
+  const [chartoptions, setChartoptions] = useState({
     maintainAspectRatio: false,
     responsive: true,
     tension: 0.4,
@@ -44,6 +48,10 @@ function LineChart(input) {
     },
     plugins: {
       zoom: {
+        pan: {
+          enabled: true,
+          mode: 'x'
+        },
         zoom: {
           wheel: {
             enabled: true,
@@ -53,7 +61,7 @@ function LineChart(input) {
         }
       },
       legend: {
-        position: input.option.legend_pos,
+        position: input.sets.legend_pos,
       },
       title: {
         display: false,
@@ -61,10 +69,13 @@ function LineChart(input) {
     },
     scales: {
       x: {
-        ticks: {
-          callback: function (val, index) {
-            return index % Math.floor((input.data.length - 1) / 8) === 0 ? this.getLabelForValue(val) : '';
-          },
+        
+        type: 'time',
+        time: {
+          unit: 'hour',
+          displayFormats: {
+            hour: 'HH:mm'
+          }
         },
       },
       y: {
@@ -77,50 +88,57 @@ function LineChart(input) {
 
   useEffect(() => {
     const datasets = [];
+    if (input.sets) {
+      input.sets.forEach((set) => {
 
-    datasets.push({
-      label: input.option.title + 'data',
-      data: input.data.map((item, index) => item[String(input.option.y)]),
-      borderColor: input.option.colour,
-      backgroundColor: input.option.colour,
-      fill: false,
-      cubicInterpolationMode: 'monotone',
-    });
-
-    if (JSON.parse(input.option.uncertainty)) { //source: Blackbox.ai 03/04/2024
-      JSON.parse(input.option.uncertainty).forEach((uncertainty) => {
-        const uncertaintyData = {
-          label: uncertainty.title + '_up',
-          data: input.data.map((item, index) => item[String(input.option.y)] * (1 + parseFloat(uncertainty.value))),
-          backgroundColor: uncertainty.colour,
-          fill: '-1',
-          cubicInterpolationMode: 'monotone',
-        };
-
-        datasets.push(uncertaintyData);
-
-        const uncertaintyDataDown = { 
-          ...uncertaintyData,
-          label: uncertainty.title + '_down',
-          data: input.data.map((item, index) => item[String(input.option.y)] * (1 - parseFloat(uncertainty.value))),
-        };
-
-        datasets.push(uncertaintyDataDown);
+      datasets.push({
+        label: set.title + 'data',
+        data: input.data.map((item, index) => item[String(set.y)]),
+        borderColor: set.colour,
+        backgroundColor: 'rgba(0,0,0,0)',
+        fill: false,
+        cubicInterpolationMode: 'monotone',
       });
-    }
+      
+      if (JSON.parse(set.uncertainty)) { //source: Blackbox.ai 03/04/2024
+        JSON.parse(set.uncertainty).forEach((uncertainty) => {
+          const uncertaintyData = {
+            label: uncertainty.title + '_up',
+            data: input.data.map((item, index) => item[String(set.y)] * (1 + parseFloat(uncertainty.value))),
+            backgroundColor: uncertainty.colour,
+            borderColor: 'rgba(0,0,0,0)',
+            fill: '+1',
+            cubicInterpolationMode: 'monotone',
+          };
 
+          datasets.push(uncertaintyData);
+
+          const uncertaintyDataDown = { 
+            ...uncertaintyData,
+            label: uncertainty.title + '_down',
+            data: input.data.map((item, index) => item[String(set.y)] * (1 - parseFloat(uncertainty.value))),
+            borderColor: 'rgba(0,0,0,0)',
+            fill: false
+          };
+
+          datasets.push(uncertaintyDataDown);
+        });
+      }
+    })};
+  
+    console.log(datasets)
     
 
     setChartData({
-      labels: input.data.map((item, index) => item[String(input.option.x)]),
+      labels: input.data.map((item, index) => item[String(input.sets[0].x)]),
       datasets: datasets,
     });
-  }, [input.data, input.option]);
+  }, [input.data, input.sets]);
 
   return (
     <>
       <div style={{height: 600, width: 1000}}>
-        <Line options={chartOptions} data={chartData} />
+        <Line options={chartoptions} data={chartData} />
       </div>
     </>
   );
