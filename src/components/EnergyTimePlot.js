@@ -1,16 +1,13 @@
-import { setQuarter } from "date-fns";
 import React, { useState, useEffect } from "react";
 import Chart from "react-apexcharts";
 
 function EnergyTimePlot(props) {
   const [datasets, setDatasets] = useState([]);
   const [colors, setColors] = useState([])
-  const [strokeWidth, setStrokeWidth] = useState([])
 
   useEffect(() => {
     let all_data = [];
     let colours = [];
-    let widths = [];    
 
     props.sets.forEach((set) => {
       

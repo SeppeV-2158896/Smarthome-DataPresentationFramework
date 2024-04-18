@@ -8,45 +8,130 @@ class ProduceConsumePlot extends Component{
 
         this.state = {
             series: [],
+            props: props,
             options: {
-                chart: {
-                  type: 'rangeArea',
-                  animations: {
-                    speed: 500
-                  }
-                },
                 zoom: {
-                  type: 'xy',
-                  enabled: true,
+                  mode: 'xy',
                   autoScaleYaxis: true
                 },
-                colors: colors,
                 stroke: {
                   curve: 'smooth',
-                  colors: colors,
                   width: [0,0,2,0,2]
                 },
-                dataLabels: {
-                  enabled: false,
-                },
-                legend: {
-                  show: false,
-                  inverseOrder: true
-                },
                 title: {
-                  text: 'Range Area with Forecast Line (Combo)'
+                  enabled: props.enable_title ? false : true,
+                  text: props.title ? props.title : 'Energy Production vs. Consumption',
+                  align: 'left'
                 },
                 xaxis: {
                   type: 'datetime',
-                  range: 1000 * 3600,
                 },
+                
                 yaxis: {
                   decimalsInFloat: 0
+                },
+                noData: {
+                  text: 'Loading...'
                 }
               },
             }
 
+            this.updateData=this.updateData.bind(this);
+
     }
+
+    componentDidMount(){
+    }
+
+    updateData(input){
+      let all_data = []
+      let colours = []
+
+      this.state.props.sets.forEach((set) => {
+     
+        if (set.uncertainty && JSON.parse(set.uncertainty)) {
+          const uncertainties = JSON.parse(set.uncertainty);
+        
+          uncertainties.forEach((uncertainty) => {
+            if (uncertainty.title && uncertainty.value) {
+              let series = {
+                type: 'rangeArea',
+                name: set.title? `${set.title}-uncertainty` : `series-${all_data.length + 1}-uncertainty`,
+                data: [],
+              };
+  
+        
+              input.forEach((element) => {
+                series.data.push({
+                  x: element[String(set.x)],
+                  y: [
+                    element[String(set.y)] - (parseFloat(uncertainty.value) * element[String(set.y)]),
+                    element[String(set.y)] + (parseFloat(uncertainty.value) * element[String(set.y)])
+                  ]
+                });
+              });
+  
+              // console.log(series)
+              all_data.push(series)
+              colours.push(uncertainty.colour)
+  
+  
+            }
+  
+            if (uncertainty.title_up && uncertainty.title_down){
+              let series = {
+                type: 'rangeArea',
+                name: set.title? `${set.title}-uncertainty` : `series-${all_data.length + 1}-uncertainty`,
+                data: [],
+              };
+  
+        
+              input.forEach((element) => {
+                series.data.push({
+                  x: element[String(set.x)],
+                  y: [element[String(uncertainty.title_down)], element[uncertainty.title_up]]
+                });
+              });
+  
+              // console.log(series)
+              all_data.push(series)
+              colours.push(uncertainty.colour)
+  
+            }
+  
+          });
+        }
+  
+        let series = {
+          type: 'line',
+          name: set.title || `series-${all_data.length + 1}`,
+          data: input.map(element => ({
+            x: element[String(set.x)],
+            y: element[String(set.y)],
+          })),
+        };
+  
+        all_data.push(series)
+        colours.push(set.colour)
+    });
+      
+      this.setState({
+        series: all_data,
+        options: {
+          colors: colours,
+          stroke: {
+            fill: {
+              colors: colours,
+            }
+          }
+        }
+      });
+
+      this.render()
+
+    }
+
+
 
     render() {
         return (
@@ -56,8 +141,7 @@ class ProduceConsumePlot extends Component{
                 <Chart
                   options={this.state.options}
                   series={this.state.series}
-                  type="area"
-                  width="500"
+                  type= 'rangeArea'
                 />
               </div>
             </div>
@@ -66,3 +150,5 @@ class ProduceConsumePlot extends Component{
       }
 
 }
+
+export default ProduceConsumePlot

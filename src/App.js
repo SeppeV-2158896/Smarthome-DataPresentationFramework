@@ -3,13 +3,8 @@ import React, {Component} from 'react'
 import NavBar from './components/NavBar/NavBar'
 import Home from './pages/Homepage'
 import * as ReactDOM from 'react-dom/client'
-import { Element } from 'chart.js'
 
 class App extends Component {
-  constructor(props){
-    super(props);
-    
-  }
   
   componentDidMount(){
     const rootElement = document.getElementById("main-content")
