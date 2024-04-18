@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import Chart from 'react-apexcharts';
 
-class ProduceConsumePlot extends Component{
+class ProduceConsumePlotLines extends Component{
 
     constructor(props) {
         super(props);
@@ -11,8 +11,9 @@ class ProduceConsumePlot extends Component{
             props: props,
             options: {
                 zoom: {
-                  mode: 'xy',
-                  autoScaleYaxis: true
+                    type: 'x',
+                    enabled: true,
+                    autoScaleYaxis: true
                 },
                 stroke: {
                   curve: 'smooth',
@@ -35,6 +36,12 @@ class ProduceConsumePlot extends Component{
                 },
                 dataLabels: {
                     enabled: false
+                },
+                legend: {
+                    show: false
+                },
+                tooltip: {
+                    enabled: false,
                 }
               },
             }
@@ -58,51 +65,78 @@ class ProduceConsumePlot extends Component{
         
           uncertainties.forEach((uncertainty) => {
             if (uncertainty.title && uncertainty.value) {
-              let series = {
-                type: 'rangeArea',
-                name: set.title? `${set.title}-uncertainty` : `series-${all_data.length + 1}-uncertainty`,
-                data: [],
-              };
+                let series_up = {
+                    type: 'line',
+                    name: set.title? `${set.title}-uncertainty-up` : `series-${all_data.length + 1}-uncertainty-up`,
+                    data: [],
+                  };
+                let series_down = {
+                    type: 'line',
+                    name: set.title? `${set.title}-uncertainty-down` : `series-${all_data.length + 1}-uncertainty-down`,
+                    data: [],
+                  };
   
         
               input.forEach((element) => {
-                series.data.push({
+                series_up.data.push({
                   x: element[String(set.x)],
-                  y: set.consumption ? [
-                    -1 * (element[String(set.y)] - (parseFloat(uncertainty.value) * element[String(set.y)])),
+                  y: set.consumption ? 
                     -1 * (element[String(set.y)] + (parseFloat(uncertainty.value) * element[String(set.y)]))
-                  ] : [
-                    element[String(set.y)] - (parseFloat(uncertainty.value) * element[String(set.y)]),
+                      : 
                     element[String(set.y)] + (parseFloat(uncertainty.value) * element[String(set.y)])
-                  ]
+                  
                 });
+
+                series_down.data.push({
+                    x: element[String(set.x)],
+                    y: set.consumption ? 
+                      -1 * (element[String(set.y)] - (parseFloat(uncertainty.value) * element[String(set.y)]))
+                     : 
+                      element[String(set.y)] - (parseFloat(uncertainty.value) * element[String(set.y)])
+                    
+                  });
               });
   
-              all_data.push(series);
+              all_data.push(series_up);
+              all_data.push(series_down);
               colours.push(uncertainty.colour ? uncertainty.colour : `rgba(${Math.random()*255}, ${Math.random()*255}. ${Math.random()*255}, 0.7`);
-              widths.push(0);
+              colours.push(uncertainty.colour ? uncertainty.colour : `rgba(${Math.random()*255}, ${Math.random()*255}. ${Math.random()*255}, 0.7`);
+              widths.push(2);
+              widths.push(2);
   
             }
   
             if (uncertainty.title_up && uncertainty.title_down){
-              let series = {
-                type: 'rangeArea',
-                name: set.title? `${set.title}-uncertainty` : `series-${all_data.length + 1}-uncertainty`,
-                data: [],
-              };
+                let series_up = {
+                    type: 'line',
+                    name: set.title? `${set.title}-uncertainty-up` : `series-${all_data.length + 1}-uncertainty-up`,
+                    data: [],
+                    };
+                let series_down = {
+                    type: 'line',
+                    name: set.title? `${set.title}-uncertainty-down` : `series-${all_data.length + 1}-uncertainty-down`,
+                    data: [],
+                    };
   
         
-              input.forEach((element) => {
-                series.data.push({
-                  x: element[String(set.x)],
-                  y: set.consumption ? [-1 *element[String(uncertainty.title_down)], -1 * element[uncertainty.title_up]] : [element[String(uncertainty.title_down)], element[String(uncertainty.title_up)]]
+                input.forEach((element) => {
+                    series_up.data.push({
+                        x: element[String(set.x)],
+                        y: set.consumption ? -1 * element[uncertainty.title_up] : element[String(uncertainty.title_up)]
+                    });
+
+                    series_down.data.push({
+                        x: element[String(set.x)],
+                        y: set.consumption ? -1 *element[String(uncertainty.title_down)] : element[String(uncertainty.title_down)]
+                    });
                 });
-              });
   
-              // console.log(series)
-              all_data.push(series);
-              colours.push(uncertainty.colour ? uncertainty.colour : `rgba(${Math.random()*255}, ${Math.random()*255}. ${Math.random()*255}, 0.7`);
-              widths.push(0);
+                all_data.push(series_up);
+                all_data.push(series_down);
+                colours.push(uncertainty.colour ? uncertainty.colour : `rgba(${Math.random()*255}, ${Math.random()*255}. ${Math.random()*255}, 0.7`);
+                colours.push(uncertainty.colour ? uncertainty.colour : `rgba(${Math.random()*255}, ${Math.random()*255}. ${Math.random()*255}, 0.7`);
+                widths.push(2);
+                widths.push(2);
   
             }
   
@@ -110,7 +144,7 @@ class ProduceConsumePlot extends Component{
         };
   
         let series = {
-          type: 'area',
+          type: 'line',
           name: set.title || `series-${all_data.length + 1}`,
           data: input.map(element => ({
             x: element[String(set.x)],
@@ -145,7 +179,7 @@ class ProduceConsumePlot extends Component{
                 <Chart
                   options={this.state.options}
                   series={this.state.series}
-                  type= 'rangeArea'
+                  type= 'line'
                 />
               </div>
             </div>
@@ -155,4 +189,4 @@ class ProduceConsumePlot extends Component{
 
 }
 
-export default ProduceConsumePlot
+export default ProduceConsumePlotLines
