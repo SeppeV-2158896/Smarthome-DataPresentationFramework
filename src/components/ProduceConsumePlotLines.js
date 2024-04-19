@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import Chart from 'react-apexcharts';
+import ApexCharts from 'apexcharts';
 
 class ProduceConsumePlotLines extends Component{
 
@@ -9,7 +10,12 @@ class ProduceConsumePlotLines extends Component{
         this.state = {
             series: [],
             props: props,
+            serieNames: [],
             options: {
+              chart: {
+                id: 'energy-production-vs-consumption',
+                type: 'line',
+              },
                 zoom: {
                     type: 'x',
                     enabled: true,
@@ -47,10 +53,21 @@ class ProduceConsumePlotLines extends Component{
             }
 
             this.updateData=this.updateData.bind(this);
+            this.getSeriesNames=this.getSeriesNames.bind(this);
+            this.toggleSeriesByName = this.toggleSeriesByName.bind(this);
 
     }
 
     componentDidMount(){
+    }
+
+    getSeriesNames(){
+      return this.state.serieNames
+    }
+
+    toggleSeriesByName(name) {
+      ApexCharts.exec('energy-production-vs-consumption', 'toggleSeries', name)
+      console.log("Doen")
     }
 
     updateData(input){
@@ -67,12 +84,12 @@ class ProduceConsumePlotLines extends Component{
             if (uncertainty.title && uncertainty.value) {
                 let series_up = {
                     type: 'line',
-                    name: set.title? `${set.title}-uncertainty-up` : `series-${all_data.length + 1}-uncertainty-up`,
+                    name: set.title? `${set.title}-uncertainty-up-${uncertainty.title}` : `series-${all_data.length + 1}-uncertainty-up-${uncertainty.title}`,
                     data: [],
                   };
                 let series_down = {
                     type: 'line',
-                    name: set.title? `${set.title}-uncertainty-down` : `series-${all_data.length + 1}-uncertainty-down`,
+                    name: set.title? `${set.title}-uncertainty-down-${uncertainty.title}` : `series-${all_data.length + 1}-uncertainty-down-${uncertainty.title}`,
                     data: [],
                   };
   
@@ -103,18 +120,20 @@ class ProduceConsumePlotLines extends Component{
               colours.push(uncertainty.colour ? uncertainty.colour : `rgba(${Math.random()*255}, ${Math.random()*255}. ${Math.random()*255}, 0.7`);
               widths.push(2);
               widths.push(2);
+              this.state.serieNames.push(series_up.name);
+              this.state.serieNames.push(series_down.name);
   
             }
   
             if (uncertainty.title_up && uncertainty.title_down){
                 let series_up = {
                     type: 'line',
-                    name: set.title? `${set.title}-uncertainty-up` : `series-${all_data.length + 1}-uncertainty-up`,
+                    name: set.title? `${set.title}-uncertainty-up-${uncertainty.title}` : `series-${all_data.length + 1}-uncertainty-up-${uncertainty.title}`,
                     data: [],
                     };
                 let series_down = {
                     type: 'line',
-                    name: set.title? `${set.title}-uncertainty-down` : `series-${all_data.length + 1}-uncertainty-down`,
+                    name: set.title? `${set.title}-uncertainty-down-${uncertainty.title}` : `series-${all_data.length + 1}-uncertainty-down-${uncertainty.title}`,
                     data: [],
                     };
   
@@ -137,6 +156,8 @@ class ProduceConsumePlotLines extends Component{
                 colours.push(uncertainty.colour ? uncertainty.colour : `rgba(${Math.random()*255}, ${Math.random()*255}. ${Math.random()*255}, 0.7`);
                 widths.push(2);
                 widths.push(2);
+                this.state.serieNames.push(series_up.name);
+                this.state.serieNames.push(series_down.name);
   
             }
   
@@ -156,6 +177,7 @@ class ProduceConsumePlotLines extends Component{
         all_data.push(series);
         colours.push(set.colour ? set.colour : `rgba(${Math.random()*255}, ${Math.random()*255}. ${Math.random()*255}, 0.7`);
         widths.push(2);
+        this.state.serieNames.push(series.name)
     });
       
       this.setState({

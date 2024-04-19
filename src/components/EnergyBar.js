@@ -9,10 +9,11 @@ class EnergyBar extends Component {
 
         this.state = {
           props: props,
+          names: [],
           series: [],
           options: {
             chart: {
-              type: 'bar',
+              type: 'line',
               height: 350,
               stacked: true,
               toolbar: {
@@ -55,6 +56,9 @@ class EnergyBar extends Component {
             fill: {
               opacity: 1
             },
+            stroke: {
+              width: [0, 0, 0, 0, 2]
+            },
             dataLabels: {
                 enabled: false,
             },
@@ -82,13 +86,15 @@ class EnergyBar extends Component {
     componentDidMount() {
     }
 
+    
+
     updateData(input) {
         console.log(input)
         let uncertain_down = [];
         let uncertain_up = [];
         let data = [];
         let allData = [];
-        let colours = [];
+        let widths = [];
         let labels = input.map((element) => element[this.state.props.sets[0].x].toString());
 
         this.state.props.sets.forEach((set) => {
@@ -99,14 +105,16 @@ class EnergyBar extends Component {
                 uncertainties.forEach((uncertainty) => {
                   if (uncertainty.title && uncertainty.value) {
                       let series_up = {
-                          name: set.title? `${set.title}-uncertainty-up` : `series-${uncertain_down.length + 1}-uncertainty-up`,
+                          name: set.title? `${set.title}-uncertainty-up-${uncertainty.title}` : `series-${uncertain_down.length + 1}-uncertainty-up-${uncertainty.title}`,
                           data: [],
+                          type: "column",
                           color: uncertainty.colour ? uncertainty.colour : `rgba(${Math.floor(Math.random()*75 + 180)}, ${Math.floor(Math.random()*75 + 180)}, ${Math.floor(Math.random()*75 + 180)}, 0.7)`
 
                         };
                       let series_down = {
-                          name: set.title? `${set.title}-uncertainty-down` : `series-${uncertain_down.length + 1}-uncertainty-down`,
+                          name: set.title? `${set.title}-uncertainty-down-${uncertainty.title}` : `series-${uncertain_down.length + 1}-uncertainty-down-${uncertainty.title}`,
                           data: [],
+                          type: "column",
                           color: uncertainty.colour ? uncertainty.colour : `rgba(${Math.floor(Math.random()*75 + 180)}, ${Math.floor(Math.random()*75 + 180)}, ${Math.floor(Math.random()*75 + 180)}, 0.7)`
                         };
         
@@ -123,19 +131,22 @@ class EnergyBar extends Component {
         
                     uncertain_up.unshift(series_up);
                     uncertain_down.push(series_down);
-                    
+                    widths.push(0);
+                    widths.unshift(0);
         
                   }
         
                   if (uncertainty.title_up && uncertainty.title_down){
                       let series_up = {
-                          name: set.title? `${set.title}-uncertainty-up` : `series-${uncertain_down.length + 1}-uncertainty-up`,
+                          name: set.title? `${set.title}-uncertainty-up-${uncertainty.title}` : `series-${uncertain_down.length + 1}-uncertainty-up-${uncertainty.title}`,
                           data: [],
+                          type: "column",
                           color: uncertainty.colour ? uncertainty.colour : `rgba(${Math.floor(Math.random()*75 + 180)}, ${Math.floor(Math.random()*75 + 180)}, ${Math.floor(Math.random()*75 + 180)}, 0.7)`
                           };
                       let series_down = {
-                          name: set.title? `${set.title}-uncertainty-down` : `series-${uncertain_down.length + 1}-uncertainty-down`,
+                          name: set.title? `${set.title}-uncertainty-down-${uncertainty.title}` : `series-${uncertain_down.length + 1}-uncertainty-down-${uncertainty.title}`,
                           data: [],
+                          type: "column",
                           color: uncertainty.colour ? uncertainty.colour : `rgba(${Math.floor(Math.random()*75 + 180)}, ${Math.floor(Math.random()*75 + 180)}, ${Math.floor(Math.random()*75 + 180)}, 0.7)`
                           };
         
@@ -150,7 +161,6 @@ class EnergyBar extends Component {
         
                       uncertain_up.unshift(series_up);
                       uncertain_down.push(series_down);
-        
                   }
         
                 });
@@ -159,18 +169,16 @@ class EnergyBar extends Component {
         let series = {
             name: set.title || `series-${allData.length + 1}`,
             data: input.map(element => (element[String(set.y)])),
+            type: 'line',
             color: set.colour ? set.colour : `rgba(${Math.floor(Math.random()*75 + 180)}, ${Math.floor(Math.random()*75 + 180)}, ${Math.floor(Math.random()*75 + 180)}, 0.7)`
         };
 
         data.push(series);
+        widths.push(2)
         });
 
         uncertain_down.forEach((set) => allData.push(set))
-        data.forEach((set) => allData.push(set))
         uncertain_up.forEach((set) => allData.push(set))
-
-        this.state.series = allData;
-        this.state.options.xaxis.categories = labels;
 
         const absDifference = (arr1, arr2) => {
             const res = [];
@@ -189,6 +197,11 @@ class EnergyBar extends Component {
             }
         }
 
+        allData.push(data[0])
+
+        this.state.series = allData;
+        this.state.options.xaxis.categories = labels;
+
         console.log(allData)
 
         
@@ -196,7 +209,7 @@ class EnergyBar extends Component {
             const root = ReactDOM.createRoot(
                 document.getElementById('chart')
             );
-            const element = <Chart options={this.state.options} series={this.state.series} type="bar"/>
+            const element = <Chart options={this.state.options} series={this.state.series} type="line"/>
             root.render(element);
         }
     }

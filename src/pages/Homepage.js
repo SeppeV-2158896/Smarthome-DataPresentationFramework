@@ -6,6 +6,8 @@ import ProduceConsumePlotLines from "../components/ProduceConsumePlotLines"
 import EnergyTimePlot from "../components/EnergyTimePlot"
 import DotPlot from "../components/DotPlot";
 import EnergyBar from "../components/EnergyBar";
+import Chart from 'react-apexcharts';
+import ApexCharts from "apexcharts";
 
 class Home extends Component {
     constructor(props) {
@@ -18,6 +20,7 @@ class Home extends Component {
         this.loadNextData = this.loadNextData.bind(this);
         this.loadPreviousData = this.loadPreviousData.bind(this);
         this.chartRef = React.createRef();
+        this.checkBox = React.createRef();
     }
 
     componentDidMount() {
@@ -74,6 +77,8 @@ class Home extends Component {
             //     });
             //     
             // }
+
+            this.render()
     }
 
     loadNextData(){
@@ -101,10 +106,23 @@ class Home extends Component {
         console.log("done")
     }
 
+    getSeriesNamesFromChartRef = () => {
+
+        if (this.chartRef && this.chartRef.current) {
+          return this.chartRef.current.getSeriesNames();
+        }
+        return [];      
+    }
+
+    toggleSeries = (index) => {
+        this.chartRef.current.toggleSeriesByName(this.getSeriesNamesFromChartRef(index))
+    }
+
     render() {
+        const seriesNames = this.getSeriesNamesFromChartRef();
         return (
             <div id='canvas' style={{ width: 1500}}>
-                <EnergyBar ref={this.chartRef} data={this.state.data} sets={[
+                <ProduceConsumePlotLines ref={this.chartRef} data={this.state.data} sets={[
                     {
                         x: 'time',
                         y: 'power',
@@ -126,8 +144,15 @@ class Home extends Component {
                     //     uncertainty: '[{"title_up": "66p_up", "title_down": "66p_down", "colour": "rgba(95,158,160, 0.7)"}]'
                     }
                 ]} />
+                <ul style={{width: 1300}}>
+                    {seriesNames.map((name, index) => (
+                    <li key={index}>
+                        <input type="checkbox" id={`series-${name}`} name="series" value={name} checked onChange={() => this.toggleSeries(index)} ref={this.checkBox}/>
+                        <label htmlFor={`series-${name}`}>{name}</label>
+                    </li>
+                    ))}
+                </ul>
                 <button type="button" onClick={this.loadPreviousData} style={{ width: 100}}>Previous Period</button>
-                <canvas style={{ width: 1300, height: 50}}></canvas>
                 <button type="button" onClick={this.loadNextData} style={{ width: 100}}>Next Period</button>
             </div>
         );
