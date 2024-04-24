@@ -25,6 +25,11 @@ class Home extends Component {
 
     componentDidMount() {
         this.loadData();
+
+        let inputs = document.querySelectorAll('.check');
+        for (let i = 0; i < inputs.length; i++) {
+            inputs[i].checked = true;
+        }
     }
 
     loadData() {
@@ -115,7 +120,8 @@ class Home extends Component {
     }
 
     toggleSeries = (index) => {
-        this.chartRef.current.toggleSeriesByName(this.getSeriesNamesFromChartRef(index))
+        console.log(index)
+        ApexCharts.exec("chart", "toggleSeries", this.getSeriesNamesFromChartRef()[index])
     }
 
     render() {
@@ -147,8 +153,8 @@ class Home extends Component {
                 <ul style={{width: 1300}}>
                     {seriesNames.map((name, index) => (
                     <li key={index}>
-                        <input type="checkbox" id={`series-${name}`} name="series" value={name} checked onChange={() => this.toggleSeries(index)} ref={this.checkBox}/>
-                        <label htmlFor={`series-${name}`}>{name}</label>
+                        <input defaultChecked type="checkbox" id={`series-${name}`} name="series" onClick={() => this.toggleSeries(index)}/>
+                        <label htmlFor={` series-${name}`}> {name}</label>
                     </li>
                     ))}
                 </ul>

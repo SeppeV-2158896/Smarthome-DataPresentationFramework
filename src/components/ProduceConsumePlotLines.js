@@ -13,7 +13,7 @@ class ProduceConsumePlotLines extends Component{
             serieNames: [],
             options: {
               chart: {
-                id: 'energy-production-vs-consumption',
+                id: 'chart',
                 type: 'line',
               },
                 zoom: {
