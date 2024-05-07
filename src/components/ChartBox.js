@@ -1,11 +1,11 @@
 import React, { Component } from "react";
 import Papa from 'papaparse';
 import { parse } from 'date-fns';
-import ProduceConsumePlot from "../components/ProduceConsumePlot";
-import ProduceConsumePlotLines from "../components/ProduceConsumePlotLines"
-import EnergyTimePlot from "../components/EnergyTimePlot"
-import DotPlot from "../components/DotPlot";
-import EnergyBar from "../components/EnergyBar";
+import ProduceConsumePlot from "./TODO/ProduceConsumePlot";
+import ProduceConsumePlotLines from "./TODO/ProduceConsumePlotLines"
+import EnergyTimePlot from "./TODO/EnergyTimePlot"
+import DotPlot from "./TODO/DotPlot";
+import EnergyBar from "./TODO/EnergyBar";
 import Chart from 'react-apexcharts';
 import ApexCharts from "apexcharts";
 

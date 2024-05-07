@@ -1,11 +1,11 @@
 import React, { Component } from "react";
 import Papa from 'papaparse';
 import { parse } from 'date-fns';
-import ProduceConsumePlot from "../components/ProduceConsumePlot";
-import ProduceConsumePlotLines from "../components/ProduceConsumePlotLines"
-import EnergyTimePlot from "../components/EnergyTimePlot"
-import DotPlot from "../components/DotPlot";
-import EnergyBar from "../components/EnergyBar";
+import ProduceConsumePlot from "../components/TODO/ProduceConsumePlot";
+import ProduceConsumePlotLines from "../components/TODO/ProduceConsumePlotLines"
+import EnergyTimePlot from "../components/TODO/EnergyTimePlot"
+import DotPlot from "../components/TODO/DotPlot";
+import EnergyBar from "../components/TODO/EnergyBar";
 import Chart from 'react-apexcharts';
 import ApexCharts from "apexcharts";
 import ChartBox from "../components/ChartBox"
@@ -86,7 +86,7 @@ class Home extends Component {
             //     
             // }
 
-            this.chartRef.current.updateData(dataset)
+            // this.chartRef.current.updateData(dataset)
             this.render()
     }
 
