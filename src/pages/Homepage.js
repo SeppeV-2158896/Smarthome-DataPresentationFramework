@@ -8,6 +8,7 @@ import DotPlot from "../components/DotPlot";
 import EnergyBar from "../components/EnergyBar";
 import Chart from 'react-apexcharts';
 import ApexCharts from "apexcharts";
+import ChartBox from "../components/ChartBox"
 
 class Home extends Component {
     constructor(props) {
@@ -21,6 +22,7 @@ class Home extends Component {
         this.loadPreviousData = this.loadPreviousData.bind(this);
         this.chartRef = React.createRef();
         this.checkBox = React.createRef();
+
     }
 
     componentDidMount() {
@@ -35,20 +37,21 @@ class Home extends Component {
     loadData() {
         let dataset = [];
         let loaded = false;
+        console.log("start")
         Papa.parse('./power.csv', {
             download: true,
             header: true,
             dynamicTyping: true,
-            delimiter: ';',
-            preview: 14400,
+            delimiter: ',',
+            preview: 44640,
             step: (result) => {
                 let item = result.data;
                 const formattedData = {
-                    time: parse(`${item['Date']} ${item['Time']}`, "d/M/yyyy HH:mm:ss", new Date()),
-                    power: item['Global_active_power'],
-                    power_2: item['Sub_metering_2'],
-                    '66p_up': item['Sub_metering_2'] + item['Sub_metering_2'] * Math.random() * 0.5,
-                    '66p_down': item['Sub_metering_2'] - item['Sub_metering_2'] * Math.random() * 0.5
+                    time: parse(`${item['date_time']}`, "yyyy-MM-dd HH:mm:ssxxxxx", new Date()),
+                    power: item['electric heating element'],
+                    power_2: item['fridge'],
+                    '66p_up': item['fridge'] + item['fridge'] * Math.random() * 0.1,
+                    '66p_down': item['fridge'] - item['fridge'] * Math.random() * 0.1
                 };
 
                 dataset.push(formattedData);
@@ -83,6 +86,7 @@ class Home extends Component {
             //     
             // }
 
+            this.chartRef.current.updateData(dataset)
             this.render()
     }
 
@@ -125,10 +129,10 @@ class Home extends Component {
     }
 
     render() {
-        const seriesNames = this.getSeriesNamesFromChartRef();
+        // const seriesNames = this.getSeriesNamesFromChartRef();
         return (
-            <div id='canvas' style={{ width: 1500}}>
-                <ProduceConsumePlotLines ref={this.chartRef} data={this.state.data} sets={[
+            <div id='canvas'>
+                <ChartBox style={{ width: 1500}} ref={this.chartRef} data={this.state.data} sets={[
                     {
                         x: 'time',
                         y: 'power',
@@ -149,15 +153,15 @@ class Home extends Component {
                     //     consumption: true,
                     //     uncertainty: '[{"title_up": "66p_up", "title_down": "66p_down", "colour": "rgba(95,158,160, 0.7)"}]'
                     }
-                ]} />
-                <ul style={{width: 1300}}>
+                ]}/>
+                {/* <ul style={{width: 1300}}>
                     {seriesNames.map((name, index) => (
                     <li key={index}>
                         <input defaultChecked type="checkbox" id={`series-${name}`} name="series" onClick={() => this.toggleSeries(index)}/>
                         <label htmlFor={` series-${name}`}> {name}</label>
                     </li>
                     ))}
-                </ul>
+                </ul> */}
                 <button type="button" onClick={this.loadPreviousData} style={{ width: 100}}>Previous Period</button>
                 <button type="button" onClick={this.loadNextData} style={{ width: 100}}>Next Period</button>
             </div>

@@ -4,24 +4,23 @@ import pandas as pd
 from IPython.display import display
 
 def read_csv(file_path):
-    return pd.read_csv(file_path)
+    return pd.read_csv(file_path, delimiter=",")
 
 def write_csv(file_path, header, data):
     data.to_csv(file_path, index=False)
 
-def extract_data_points(original_data, interval_minutes=5, duration_hours=24):
+def extract_data_points(original_data, interval_minutes=1, duration_hours=(24*31)):
     display(original_data)
-    
-    df = original_data.iloc[:, : 22]
-    del df['icon']
+
+    df = pd.DataFrame(original_data)
     
     result = pd.DataFrame(columns = df.columns)
     
-    for i in range(0,len(df['time'])):
-        if (i - 1) % (100 * interval_minutes) == 0:
+    for i in range(1,len(df['date_time'])):
+        if ((i-1) % (60 * interval_minutes)) == 0:
             result = pd.concat([result, pd.DataFrame(df.filter(items=[i], axis=0), columns = df.columns)], ignore_index=True)
-        if i-1 > 3600*duration_hours:
-            break;
+        if ((i-1) // (60 * interval_minutes)) > 60*duration_hours:
+            break
     
     display(result)
     
@@ -30,7 +29,7 @@ def extract_data_points(original_data, interval_minutes=5, duration_hours=24):
     
 
 def main():
-    input_file_path = 'HomeC.csv'
+    input_file_path = 'Appliance_data.csv'
     output_file_path = 'power.csv'
 
     original_data = read_csv(input_file_path)
@@ -39,12 +38,8 @@ def main():
     extracted_data = extract_data_points(original_data)
 
     # Write the results to a new CSV file
-    header = ['time', 'use [kW]', 'gen [kW]', 'House overall [kW]', 'Dishwasher [kW]', 'Furnace 1 [kW]',
-              'Furnace 2 [kW]', 'Home office [kW]', 'Fridge [kW]', 'Wine cellar [kW]', 'Garage door [kW]',
-              'Kitchen 12 [kW]', 'Kitchen 14 [kW]', 'Kitchen 38 [kW]', 'Barn [kW]', 'Well [kW]', 'Microwave [kW]',
-              'Living room [kW]', 'Solar [kW]', 'temperature', 'icon', 'humidity', 'visibility', 'summary',
-              'apparentTemperature', 'pressure', 'windSpeed', 'cloudCover', 'windBearing', 'precipIntensity',
-              'dewPoint', 'precipProbability']
+    header = ['date_time', 'television', 'fan', 'fridge', 'laptop computer', 'electric heating element', 'oven', 'unknown', 'washing machine', 'microwave', 'toaster', 'sockets', 'cooker']
+
 
     write_csv(output_file_path, header, extracted_data)
 
