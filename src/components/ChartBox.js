@@ -9,6 +9,7 @@ import EnergyBar from "./TODO/EnergyBar";
 import Chart from 'react-apexcharts';
 import ApexCharts from "apexcharts";
 import BrushChart from "./TODO/BrushChart";
+import TotalPlot from "./TODO/TotalPlot"
 
 class Home extends Component {
     constructor(props) {
@@ -102,6 +103,22 @@ class Home extends Component {
                         <div height="400px">
                             <div style={{height: "100%", width: "75%", float: "left", display: "inline-block"}}>
                                 <BrushChart ref={this.chartRef} data={this.state.data} sets={this.state.sets}/>
+                            </div>
+                            <div style={{foat: "right", display: "inline-block"}}>
+                                <div style={{height:"50%", width:"25%"}}>
+                                    Legend
+                                </div>
+                                <div style={{height:"50%", width:"25%"}}>
+                                    Tools
+                                </div>
+                            </div>
+                        </div>
+                    )
+                case("TotalPlot"):
+                    return (
+                        <div height="400px">
+                            <div style={{height: "100%", width: "75%", float: "left", display: "inline-block"}}>
+                                <TotalPlot ref={this.chartRef} data={this.state.data} sets={this.state.sets}/>
                             </div>
                             <div style={{foat: "right", display: "inline-block"}}>
                                 <div style={{height:"50%", width:"25%"}}>

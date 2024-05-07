@@ -1,5 +1,5 @@
 import './App.scss'
-import React, { Component } from 'react'
+import React, { Component, createRef } from 'react'
 import NavBar from './components/NavBar/NavBar'
 import Home from './pages/Homepage'
 
@@ -9,24 +9,35 @@ class App extends Component {
     this.state = {
       currentPage: 'Home'
     };
+
+    this.pageRef = React.createRef()
   }
 
   handleMenuItemClick = (page) => {
-    this.setState({ currentPage: page });
+    this.state.currentPage = page;
+    this.renderPage()
   };
 
+  componentDidMount = () => {
+    this.renderPage()
+  }
+
   renderPage = () => {
-    switch (this.state.currentPage) {
+    switch (String(this.state.currentPage)) {
       case 'Home':
-        return <Home id='home' width="1000px" />;
+        this.pageRef.current.update("ProduceConsumePlot")
+        break;
       case 'Household':
-        return (<div>Yoo</div>);
+        this.pageRef.current.update("ProduceConsumePlotLines")
+        break;
       case 'Technical':
-        // return <Technical />;
+        this.pageRef.current.update("BrushChart")
+        break;
       case 'Financial':
-        // return <Financial />;
+        this.pageRef.current.update("ProduceConsumePlot")
+        break;
       default:
-        return <Home id='home' width="1000px" />;
+        return <Home width="1000px" />;
     }
   };
 
@@ -43,7 +54,7 @@ class App extends Component {
           onItemClick={this.handleMenuItemClick}
         />
         <section id='main-content' className="main-content">
-          {this.renderPage()}
+          <Home ref={this.pageRef}/>
         </section>
       </div>
     );

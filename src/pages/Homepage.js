@@ -114,12 +114,25 @@ class Home extends Component {
         ApexCharts.exec("chart", "toggleSeries", this.getSeriesNamesFromChartRef()[index])
     }
 
+    update = (type) => {
+        this.state.type = type
+        this.render()
+    }
+
     render() {
         // const seriesNames = this.getSeriesNamesFromChartRef();
         return (
             <div id='canvas' style={{ width: 1500, height: 800}}>
                 <ChartBox style={{ width: 1500, height: 800}} ref={this.chartRef} type={"BrushChart"} data={this.state.data} sets={[
                     {
+                        x: 'time',
+                        y: 'power_2',
+                        title: 'Power Consumption Fridge over Time',
+                        colour: 'rgba(95,158,160,1)',
+                        legend_pos: 'top',
+                        consumption: false,
+                        uncertainty: '[{"title_up": "66p_up", "title_down": "66p_down", "colour": "rgba(95,158,160, 0.7)"}]'
+                    },{
                         x: 'time',
                         y: 'power',
                         title: 'Power Consumption Electric Heating over Time',
@@ -130,15 +143,7 @@ class Home extends Component {
                         radius: 2,
                         uncertainty: '[{"value": "0.2", "title": "99p", "colour": "rgba(65,105,225, 0.3)"}, {"value": "0.1", "title": "66p", "colour": "rgba(65,105,225, 0.7)"}]'
                     },
-                    {
-                        x: 'time',
-                        y: 'power_2',
-                        title: 'Power Consumption Fridge over Time',
-                        colour: 'rgba(95,158,160,1)',
-                        legend_pos: 'top',
-                        consumption: false,
-                        uncertainty: '[{"title_up": "66p_up", "title_down": "66p_down", "colour": "rgba(95,158,160, 0.7)"}]'
-                    }
+                    
                 ]}/>
                 {/* <ul style={{width: 1300}}>
                     {seriesNames.map((name, index) => (
