@@ -117,8 +117,8 @@ class Home extends Component {
     render() {
         // const seriesNames = this.getSeriesNamesFromChartRef();
         return (
-            <div id='canvas'>
-                <ChartBox style={{ width: 1500}} ref={this.chartRef} type={"ProduceConsumePlotLines"} data={this.state.data} sets={[
+            <div id='canvas' style={{ width: 1500, height: 800}}>
+                <ChartBox style={{ width: 1500, height: 800}} ref={this.chartRef} type={"BrushChart"} data={this.state.data} sets={[
                     {
                         x: 'time',
                         y: 'power',
@@ -136,7 +136,7 @@ class Home extends Component {
                         title: 'Power Consumption Fridge over Time',
                         colour: 'rgba(95,158,160,1)',
                         legend_pos: 'top',
-                        consumption: true,
+                        consumption: false,
                         uncertainty: '[{"title_up": "66p_up", "title_down": "66p_down", "colour": "rgba(95,158,160, 0.7)"}]'
                     }
                 ]}/>

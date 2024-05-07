@@ -1,19 +1,15 @@
-//source: https://codesandbox.io/p/sandbox/react-vertical-menu-9sqfk?file=%2Fpublic%2Fimg%2Fmanage%20user.svg%3A2%2C2-5%2C10
 import React, { useState } from "react";
 
-const NavBar = ({ li }) => {
+const NavBar = ({ li, onItemClick }) => {
   const [window, setWindow] = useState(false);
 
-  let openClose = () => {
-    if (window === false) {
-      setWindow(true);
-    } else {
-      setWindow(false);
-    }
+  const openClose = () => {
+    setWindow(!window);
   };
+
   return (
-    <nav className="navbar-menu" style={{ width: window === false ? 250 : 60 }}>
-      <div className="burger" onClick={() => openClose()}>
+    <nav className="navbar-menu" style={{ width: window ? 250 : 60 }}>
+      <div className="burger" onClick={openClose}>
         <img src="img/menu.svg" alt="burger" />
       </div>
       <ul className="navbar__list">
@@ -22,13 +18,15 @@ const NavBar = ({ li }) => {
             <img
               src={item[1]}
               alt={item[1]}
-              style={{ paddingLeft: window === false ? 27 : 17}}
+              style={{ paddingLeft: window ? 17 : 27 }}
             />
             <li
               className="navbar__li"
-              style={{ display: window === false ? "inline-block" : "none",
-              verticalAlign: "middle"
-            }}
+              style={{
+                display: window ? "inline-block" : "none", // Only display when window is open
+                verticalAlign: "middle"
+              }}
+              onClick={() => onItemClick(item[0])} // Passes the page name to the parent component
             >
               {item[0]}
             </li>
