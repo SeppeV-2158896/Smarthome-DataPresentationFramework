@@ -51,34 +51,51 @@ class ProduceConsumePlot extends Component{
       let all_data = []
       let colours = []
       let widths = []
+      let stops = []
+      let types = []
 
       this.state.props.sets.forEach((set) => {
         let uncertainties = DataRepository.getRangeSeriesFromUncertainty(input, set)
-        let dataseries = DataRepository.getSeriesFromData(input, set)
 
         if (uncertainties.dataset.length > 0){
           uncertainties.dataset.forEach((series) => all_data.push(series))
           uncertainties.colours.forEach((colour) => colours.push(colour))
           uncertainties.widths.forEach((width) => widths.push(width))
+          uncertainties.types.forEach((type) => types.push(type))
         }
+
+        let dataseries = DataRepository.getSeriesFromData(input, set, 0, null, uncertainties.dataset[-1])
 
         if (dataseries.dataset.data.length > 0){
           all_data.push(dataseries.dataset)
           colours.push(dataseries.colours)
           widths.push(dataseries.widths)
+          stops = dataseries.stops
+          types.push(dataseries.type)
         }
         
       })
-          
+      
       this.setState({
         series: all_data,
         options: {
           colors: colours,
+          fill:{
+            type: types,
+            gradient: {
+              type: 'vertical',
+              shadeIntensity: 1,
+              opacityFrom: 1,
+              opacityTo: 1,
+              colorStops: stops
+            },
+          },
           stroke: {
             width: widths
           } 
         }
       })
+      
 
       this.render()
 

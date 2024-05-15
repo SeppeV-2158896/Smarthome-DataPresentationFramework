@@ -10,13 +10,11 @@ import Chart from 'react-apexcharts';
 import ApexCharts from "apexcharts";
 import BrushChart from "./TODO/BrushChart";
 import TotalPlot from "./TODO/TotalPlot"
+import LiveChart from "./TODO/LiveChart";
 
 class Home extends Component {
     constructor(props) {
         super(props);
-
-        console.log(props)
-
         this.state = {
             type: props.type,
             data: null,
@@ -64,7 +62,6 @@ class Home extends Component {
 
     render() {
         if (this.state.type){
-            console.log(this.state.type)
             switch(this.state.type){
                 case("ProduceConsumePlot"):
                     return (
@@ -119,6 +116,22 @@ class Home extends Component {
                         <div height="400px">
                             <div style={{height: "100%", width: "75%", float: "left", display: "inline-block"}}>
                                 <TotalPlot ref={this.chartRef} data={this.state.data} sets={this.state.sets}/>
+                            </div>
+                            <div style={{foat: "right", display: "inline-block"}}>
+                                <div style={{height:"50%", width:"25%"}}>
+                                    Legend
+                                </div>
+                                <div style={{height:"50%", width:"25%"}}>
+                                    Tools
+                                </div>
+                            </div>
+                        </div>
+                    )
+                case("LiveChart"):
+                    return (
+                        <div height="400px">
+                            <div style={{height: "100%", width: "75%", float: "left", display: "inline-block"}}>
+                                <LiveChart ref={this.chartRef} data={this.state.data} sets={this.state.sets}/>
                             </div>
                             <div style={{foat: "right", display: "inline-block"}}>
                                 <div style={{height:"50%", width:"25%"}}>

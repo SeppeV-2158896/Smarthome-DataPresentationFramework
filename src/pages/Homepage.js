@@ -37,7 +37,6 @@ class Home extends Component {
     loadData() {
         let dataset = [];
         let loaded = false;
-        console.log("start")
         Papa.parse('./power.csv', {
             download: true,
             header: true,
@@ -110,38 +109,53 @@ class Home extends Component {
     }
 
     toggleSeries = (index) => {
-        console.log(index)
         ApexCharts.exec("chart", "toggleSeries", this.getSeriesNamesFromChartRef()[index])
     }
 
     update = (type) => {
         this.state.type = type
         this.render()
+        
     }
 
     render() {
         // const seriesNames = this.getSeriesNamesFromChartRef();
         return (
             <div id='canvas' style={{ width: 1500, height: 800}}>
-                <ChartBox style={{ width: 1500, height: 800}} ref={this.chartRef} type={"BrushChart"} data={this.state.data} sets={[
+                <ChartBox style={{ width: 1500, height: 800}} ref={this.chartRef} type={"ProduceConsumePlot"} data={this.state.data} sets={[
+                    // {
+                    //     x: 'time',
+                    //     y: 'power_2',
+                    //     title: 'Power Consumption Fridge over Time',
+                    //     colour: 'rgba(95,158,160,1)',
+                    //     legend_pos: 'top',
+                    //     consumption: false,
+                    //     uncertainty: '[{"title_up": "66p_up", "title_down": "66p_down", "colour": "rgba(95,158,160, 0.7)"}]'
+                    // },{
+                    //     x: 'time',
+                    //     y: 'power',
+                    //     title: 'Power Consumption Electric Heating over Time',
+                    //     colour: 'rgba(0,0,255,1)',
+                    //     background: 'rgba(0,0,255,0.2)',
+                    //     legend_pos: 'top',
+                    //     consumption: false,
+                    //     radius: 2,
+                    //     uncertainty: '[{"value": "0.2", "title": "99p", "colour": "rgba(65,105,225, 0.3)"}, {"value": "0.1", "title": "66p", "colour": "rgba(65,105,225, 0.7)"}]'
+                    // },
                     {
-                        x: 'time',
-                        y: 'power_2',
-                        title: 'Power Consumption Fridge over Time',
-                        colour: 'rgba(95,158,160,1)',
-                        legend_pos: 'top',
-                        consumption: false,
-                        uncertainty: '[{"title_up": "66p_up", "title_down": "66p_down", "colour": "rgba(95,158,160, 0.7)"}]'
-                    },{
                         x: 'time',
                         y: 'power',
                         title: 'Power Consumption Electric Heating over Time',
                         colour: 'rgba(0,0,255,1)',
-                        background: 'rgba(0,0,255,0.2)',
+                        // background: 'rgba(0,0,255,0.2)',
                         legend_pos: 'top',
                         consumption: false,
+                        // gradient: {
+                        //     enable: true,
+                        //     value: 40
+                        // },
                         radius: 2,
-                        uncertainty: '[{"value": "0.2", "title": "99p", "colour": "rgba(65,105,225, 0.3)"}, {"value": "0.1", "title": "66p", "colour": "rgba(65,105,225, 0.7)"}]'
+                        uncertainty: '[{"value": "0.2", "title": "99p", "colour": "rgba(65,105,225, 0.3)"}]'
                     },
                     
                 ]}/>
