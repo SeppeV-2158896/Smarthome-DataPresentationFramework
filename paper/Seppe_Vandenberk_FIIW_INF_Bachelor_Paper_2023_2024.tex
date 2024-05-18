@@ -48,7 +48,7 @@
 
 \author{Seppe~Vandenberk \\
         Student of Shared Faculty of Software Engineering Technology at KU Leuven and Hasselt University \\
-        Prof. dr. Gustavo Alberto Rovelo Ruiz (Co-Promotor), Prof. dr. Davy Vanacken (Promotor), De heer Sebe Vanbrabant (Internal Supervisor) % <-this % stops a space
+        Prof. dr. Gustavo Rovelo Ruiz (Co-Promotor), Prof. dr. Davy Vanacken (Promotor), De heer Sebe Vanbrabant (Internal Supervisor) % <-this % stops a space
     }
 
 \maketitle
@@ -82,172 +82,61 @@ Data visualization, layered visualization, smart homes, web user interface,
 
 
 \section{Introduction}
-\IEEEPARstart{T}{he} modern home is undergoing a transformation driven by the Internet of Things (IoT) and the increasing demand for energy efficiency. There has been a significant evolution from the concept of domotica, the initial idea of home automation, to the integrated systems of smart homes and smart living \cite{Solaimani2015WhatLiterature}. Smart home technologies are innovations that are in some way digitally connected, automated, or enhance services to the user. \cite{Urwin2023WhatIn, NarsunStudios2023UsingFuture, Sovacool2020SmartPolicies}.
+% Coming down from broad subject to smart homes and there definition
+\IEEEPARstart{T}{he} modern home is undergoing a transformation driven by the Internet of Things (IoT) and the increasing demand for energy efficiency~\cite{2023TheNews}. There has been a significant evolution from the concept of domotics, the initial idea of home automation, to the integrated systems of smart homes and smart living~\cite{Solaimani2015WhatLiterature}. Smart home technologies are innovations that are digitally connected, automated, or enhance services to the user~\cite{Urwin2023WhatIn, NarsunStudios2023UsingFuture, Sovacool2020SmartPolicies}. Statistics from Berg Insight illustrate this growing trend, with over 63 million smart homes in Europe in 2022, each having at least one smart device by year's end. Popular devices include smart thermostats, lights, security cameras, and smart plugs~\cite{The2022}. By 2024, the focus expanded beyond the convenience of controlling various home devices and systems remotely, automating routine tasks, and streamlining daily activities to save time and effort. In 2024, over 10\% of households adopted at least one smart appliance, including ovens, refrigerators, washing machines, mowing robots, and smart vacuums~\cite{2024SmartForecast}.
 
-Statistics illustrate this growing trend. In Europe alone, over 63 million smart homes existed in 2022, each having at least one smart device by year's end. The most popular devices include smart thermostats, lights, security cameras and smart plugs \cite{The2022}. However, the focus expanded beyond more convenience. As of 2024, over 10\% of all households have adopted at least one smart appliance such as an oven, refrigerator or washing machine, but also mowing robots and smart vacuums \cite{2024SmartForecast}. 
+% Defining the problem in smart homes
+While smart homes offer many benefits, from automation to improved security, a key challenge lies in understanding the true potential of the data they generate~\cite{NarsunStudios2023UsingFuture}. This data can optimize energy usage~\cite{Al-Ali2017AApproach} and personalize user experiences~\cite{Matsui2018AnSensors}. It can even contribute to big data and machine learning-based smart home systems by providing data to train models and validate results with sensor data~\cite{Machorro-Cano2020HEMS-IoT:Saving}. However, while data is very helpful for (automated) applications, its sheer volume and complexity can overwhelm inhabitants.
 
-While smart home offer a plethora of benefits, from automation to improved security, a key challenge lies in understanding the true potential of data they generate \cite{NarsunStudios2023UsingFuture}. This data can optimize energy usage \cite{Al-Ali2017AApproach} and personalize user experiences \cite{Matsui2018AnSensors}. It can even contribute to big data and machine learning-based smart home systems, by providing data to train models and validate results with sensor data \cite{Machorro-Cano2020HEMS-IoT:Saving}.  However, the sheer volume and complexity of this data can be overwhelming for users.
+% Defining the goals of this research and why this research is useful
+This paper focuses on the data visualization domain, where technology's evolution has unlocked new possibilities, allowing for more interactive and insightful representations~\cite{Unwin2020WhyVisualization}. However, the full potential of these techniques remains largely untapped in the context of smart homes. There is a lack of user-centred visualization, therefore hindering the full capability of smart home data. Despite data visualization being one of the most appropriate ways to bring information to the user, a "one-size-fits-all" approach is unlikely to be effective, according to a Harvard study~\cite{Unwin2020WhyVisualization}. Therefore, a different approach is needed since smart home users come from various backgrounds and have different technical skill sets.
 
-Smart home users come from a wide range of backgrounds and technical skillsets.  And according to a Harvard study \cite{Unwin2020WhyVisualization},  data visualization is one of the most appropriate ways to bring the info to the user, but a "one-size-fits-all" approach is unlikely to be effective. The evolution of technology has unlocked new possibilities for data visualization, allowing for more interactive and insightful representations \cite{Unwin2020WhyVisualization}. But the full potential of these techniques remains largely untapped in the context of smart homes. There is a lack of user-centered visualization, that hinders the full capability of smart home data.
+% Defining how this research is going to apprehend the problem
+To address these issues, this research focuses on developing user-friendly data visualizations for smart homes, mainly time series-related data. By leveraging user-centred design principles, the aim is to create layered data charts that enhance user comprehension and interaction with smart home data. Each layer would add extra detail to the chart. This approach ensures that users can customize their experience, making complex data more accessible and actionable. By implementing this layered data visualization strategy, the research seeks to bridge the gap between the vast potential of smart home data and the practical needs of diverse users, ultimately enhancing the usability and effectiveness of smart home systems. To achieve this, several sub-questions are explored:
 
-This research focuses on developing user-friendly data visualizations for smart homes, mainly time series related data. By leveraging user-centered design principles, it is the aim to create layered data charts that enhance user comprehension and interaction with smart home data. To achieve this, several sub-questions are explored:
-
+% Define the subquestions to explain how I designed the framework and why
 \begin{itemize}
 \item Current practices: How are data visualization techniques currently used in smart home interfaces?
 \item User challenges: What challenges do users face when trying to understand these data visualizations?
-\item Framework design: Based on user needs, how can a framework be designed for layered charts that empowers (AI) developers to efficiently present data without requiring in-depth knowledge of data visualization libraries?
+\item Framework design: How can a framework be designed for layered charts that empower (AI) developers to efficiently present data without requiring in-depth knowledge of data visualization libraries? The framework should include predefined templates and components that handle common visualization tasks, such as displaying time series data and representing uncertainty in AI predictions. It should offer intuitive tools for customizing charts to fit specific needs, ensuring that developers can focus on the AI aspects without being bogged down by the complexities of visualization design.
 \end{itemize}
 
-By answering these questions, this research paper contributes to a larger effort of creating user-friendly smart home interfaces. 
+% Give the user a more detailed overview from what view point I start and what I'm trying to accomplish
+This research paper contributes to a larger effort to create user-friendly smart home interfaces by answering these questions. It starts by discovering different visualization techniques that users need to understand the presented data better. Following this, the framework will be designed with some of the most used approaches so these can be evaluated on their capability to display uncertainty and their effectiveness in providing sufficient detail for different user profiles
 
-\section{Related works}
-In the field of data visualization, there already exist a significant amount of studies that research data visualization in smart homes and how data visualization can be used for better user comprehension. This section reviews these studies and is focused on finding gaps in the research and useful information for the development of the framework. Because there is a lot of general research in to data visualization techniques, this section only gives a brief insight into smart home related researches and closely related topics. 
+\section{Related work} % This section introduces some interesting research that I will use in my approach to design an efficient framework with the most useful techniques.
 
-\subsection{Smart home data visualization}
-
-Despite the many studies that have been conducted in the field of data visualization, the amount of research about smart home data is limited. Castelli et al. \cite{CastelliWhatVisualization} studied a similar subject and developed an end-user centered smart home interface. They worked with 5 main predefined widgets, there was a widget for each of the following topics: news, security, temperature, energy and diary. The diary widget displayed any events that happened at home, and the news widget displayed the lastest news based on the user's preferences. The security widget was similar to the diary widget, but only displayed the latest home security related events. The temperature and energy widgets are the most related to this paper, because the main focus is to research data visualization techniques involving time related data, but without focus on current measurements. The user interface they designed used histograms and line charts to display time related data series. Also Heer et al. \cite{Heer2009SizingVisualizations} found out that time series are best displayed using line charts. This research also  emphasizes the trade-off between data density and accuracy in visualizations. Packing more information onto a smaller chart can lead to increased estimation errors. Consequently, finding the right balance between including necessary details and maintaining clarity becomes crucial for effective visualization design. In 2006, Few S. did extensive research \cite{StephenFew2006InformationDesign} on how to visualize different data series based on different theories, such as user centred, optimal space use, optimal use of chart and data types. Many of these results are reflected in current day studies such as \cite{Heer2009SizingVisualizations, CastelliWhatVisualization}.
+% Explain the need of related work
+In the field of data visualization, many studies have already been conducted on data visualization in smart homes and its effect on user comprehension. This section reviews these studies and is focused on finding gaps in the research and useful information for the development of the framework. Because there has been extensive research into various data visualization techniques, this section only gives a brief insight into smart home-related research and closely related topics. 
 
 \subsection{General data visualization}
+In 2006, Few S. did extensive research~\cite{StephenFew2006InformationDesign} on how to visualize different data series based on different theories, such as user-centred, optimal space use, and optimal use of charts and data types. Many of these results are reflected in current-day studies such as~\cite{Heer2009SizingVisualizations, CastelliWhatVisualization}. Another example is the study by Protopsaltis et al.~\cite{Protopsaltis2020DataChallenges}, which discussed challenges and IoT data visualisation techniques. They compared different chart types based on their strengths and weaknesses and suitability for different communication goals. The research showed that scatter plots, which are frequently used for 2D point clouds, can be used for time series. Since line charts are significantly clearer to the reader, scatter plots are not frequently implemented for time series. However, some newer chart types have proven their role in time series visualization, such as the horizon and offset graphs, but these are also based on a normal line chart. 
 
-Protopsaltis et al. \cite{Protopsaltis2020DataChallenges} discuss challenges and techniques for IoT data visualization. They compared diffrent chart types based on their strengths and weakenesses, but also their suitability for diffrent communication goals. The research showed that scatter plots, which are frequently used for 2D point clouds, can be used for time series. Although line charts are significantly more clear to the reader, which makes that scatter plots are not frequently implemented for time series. But there are some newer chart types that have proven their role in time series visualization, for example the horizon and offset graphs, but these are also based of a normal line chart. 
-
-Another chart type that is frequently used to visualize time related data, are the column or bar charts. The section from Virtual Event report \cite{Protopsaltis2020DataChallenges} acknowledges their role in this subject, but also states that they can only be used for limited time periods. Meaning that a continuous data set with a significant amount of data points can better be shown through a line plot. But a summary of time periods, or a chart that requires a relative high amount of series, can be better performed by a column chart, e.g. the total energy consumption from every kitchen appliance in a day.
+Another chart type that is frequently used to visualize time-related data is the column or bar chart. The section from Virtual Event report~\cite{Protopsaltis2020DataChallenges} acknowledges their role in this subject but also states that they can only be used for limited time periods. This means that a continuous data set with many data points can better be shown through a line plot. On the other hand, a column chart can better perform a summary of time periods or a chart requiring a relatively high amount of series (e.g., the total energy consumption from every kitchen appliance in a day).
 
 \subsection{Uncertainty visualization}
 
-Data is never fully precise or correct, data always comes together with uncertainty. Not only data predictions come with uncertainty, but also data measurements come with an uncertainty \cite{Padilla2021UncertainVisualizations}. A significant amount of research in techniques to draw these uncertainties have been done, but the majority focusses on displaying the uncertainty around one single measurement. So for this paper not all of these finding are usable, but techniques such as whiskers on a column chart and density plots can be used on the low periodical series. For the line plots, techniques often fall back on displaying ranges by some kind of border such as other line charts or filled ribbons \cite{Kamal2021RecentSurvey, Padilla2021UncertainVisualizations, GrietheVisualizingMaking}.
+Both data predictions and measurements come with a degree of uncertainty~\cite{Padilla2021UncertainVisualizations}. A large amount of research in techniques to draw these uncertainties has been conducted, but the majority focuses on displaying the uncertainty around one single measurement. For the line plots, techniques often fall back on displaying ranges by some kind of border such as other line charts or filled ribbons~\cite{Kamal2021RecentSurvey, Padilla2021UncertainVisualizations, GrietheVisualizingMaking}.
+
+\subsection{Smart home data visualization}
+
+Despite the many studies that have been conducted in the field of data visualization, the amount of research on smart home data is limited. Castelli et al.~\cite{CastelliWhatVisualization} studied a similar subject and developed an end-user-centered smart home interface. They used 5 main predefined widgets, each dedicated to a specific topic: news, security, temperature, energy, and diary. The diary widget displayed any events that happened at home, and the news widget displayed the latest news based on the user's preferences. The security widget was similar to the diary widget, but only displayed the latest home-security-related events. The temperature and energy widgets, however, involve visualizing time-related data. The resulting framework from this paper aims to visualize similar data. The user interface they designed used histograms and line charts to display time-related data series. Heer et al.~\cite{Heer2009SizingVisualizations} also claim that line charts best display time series. Their research furthermore emphasizes the trade-off between data density and accuracy in visualizations: packing more information onto a smaller chart can lead to increased estimation errors. Consequently, finding the right balance between including necessary details and maintaining clarity becomes crucial for effective visualization design. 
 
 \subsection{Layered visualization techniques}
 
-Layered visualizations present information in multiple layers, catering to users with varying needs and technical backgrounds. While research specifically on smart home data visualization is limited, Heer et al. (2009) explored the effectiveness of layered charts for time series data, a common format in smart homes. Although their findings were based on a maximum of 2 sets at a time, the paper suggests that layering can improve user comprehension, especially for complex datasets. Also Kong M. and Agrawala N. came to the conclusion that adding different layers to a graph with each each layer offering a different level of detail. Their findings suggest that layered visualizations can improve user comprehension compared to traditional single-layer visualizations, especially for data sets with high dimensionality. But it needs to be kept in mind that each layer needs to be tailored to the specific needs of the users \cite{Kong2012GraphicalReading}.
+Layered visualizations present information in multiple layers, catering to users with varying needs and technical backgrounds. While research specifically on smart home data visualization is limited, Heer et al.~\cite{Heer2009SizingVisualizations} explored the effectiveness of layered charts for time series data, a common format in smart homes. Although their findings were based on a maximum of 2 sets at a time, the paper suggests that layering can improve user comprehension, especially for complex datasets. Kong M. and Agrawala N.~\cite{Kong2012GraphicalReading} concluded that adding different layers to a graph with each layer offering a different level of detail helps to "support the perceptual and cognitive processes and facilitate chart reading". Their findings suggest that layered visualizations can improve user comprehension compared to traditional single-layer visualizations, especially for data sets with high dimensionality. But it needs to be kept in mind that each layer needs to be tailored to the specific needs of the users.
 
-% An example of a floating figure using the graphicx package.
-% Note that \label must occur AFTER (or within) \caption.
-% For figures, \caption should occur after the \includegraphics.
-% Note that IEEEtran v1.7 and later has special internal code that
-% is designed to preserve the operation of \label within \caption
-% even when the captionsoff option is in effect. However, because
-% of issues like this, it may be the safest practice to put all your
-% \label just after \caption rather than within \caption{}.
-%
-% Reminder: the "draftcls" or "draftclsnofoot", not "draft", class
-% option should be used if it is desired that the figures are to be
-% displayed while in draft mode.
-%
-%\begin{figure}[!t]
-%\centering
-%\includegraphics[width=2.5in]{myfigure}
-% where an .eps filename suffix will be assumed under latex, 
-% and a .pdf suffix will be assumed for pdflatex; or what has been declared
-% via \DeclareGraphicsExtensions.
-%\caption{Simulation results for the network.}
-%\label{fig_sim}
-%\end{figure}
+\section{Methodology} % Explain some results from other researches that had an impact on my design choices. 
 
-% Note that the IEEE typically puts floats only at the top, even when this
-% results in a large percentage of a column being occupied by floats.
+So, for this paper, not all of these findings are usable, but techniques such as whiskers on a column chart and density plots can be used on the low periodical series.
+
+\section{Framework architecture} % Explain the design of my framework. And show the user how the interface looks for the developer and end-user. Exhaustive API documentation will be documented in the appendix.
 
 
-% An example of a double column floating figure using two subfigures.
-% (The subfig.sty package must be loaded for this to work.)
-% The subfigure \label commands are set within each subfloat command,
-% and the \label for the overall figure must come after \caption.
-% \hfil is used as a separator to get equal spacing.
-% Watch out that the combined width of all the subfigures on a 
-% line do not exceed the text width or a line break will occur.
-%
-%\begin{figure*}[!t]
-%\centering
-%\subfloat[Case I]{\includegraphics[width=2.5in]{box}%
-%\label{fig_first_case}}
-%\hfil
-%\subfloat[Case II]{\includegraphics[width=2.5in]{box}%
-%\label{fig_second_case}}
-%\caption{Simulation results for the network.}
-%\label{fig_sim}
-%\end{figure*}
-%
-% Note that often IEEE papers with subfigures do not employ subfigure
-% captions (using the optional argument to \subfloat[]), but instead will
-% reference/describe all of them (a), (b), etc., within the main caption.
-% Be aware that for subfig.sty to generate the (a), (b), etc., subfigure
-% labels, the optional argument to \subfloat must be present. If a
-% subcaption is not desired, just leave its contents blank,
-% e.g., \subfloat[].
-
-
-% An example of a floating table. Note that, for IEEE style tables, the
-% \caption command should come BEFORE the table and, given that table
-% captions serve much like titles, are usually capitalized except for words
-% such as a, an, and, as, at, but, by, for, in, nor, of, on, or, the, to
-% and up, which are usually not capitalized unless they are the first or
-% last word of the caption. Table text will default to \footnotesize as
-% the IEEE normally uses this smaller font for tables.
-% The \label must come after \caption as always.
-%
-%\begin{table}[!t]
-%% increase table row spacing, adjust to taste
-%\renewcommand{\arraystretch}{1.3}
-% if using array.sty, it might be a good idea to tweak the value of
-% \extrarowheight as needed to properly center the text within the cells
-%\caption{An Example of a Table}
-%\label{table_example}
-%\centering
-%% Some packages, such as MDW tools, offer better commands for making tables
-%% than the plain LaTeX2e tabular which is used here.
-%\begin{tabular}{|c||c|}
-%\hline
-%One & Two\\
-%\hline
-%Three & Four\\
-%\hline
-%\end{tabular}
-%\end{table}
-
-
-% Note that the IEEE does not put floats in the very first column
-% - or typically anywhere on the first page for that matter. Also,
-% in-text middle ("here") positioning is typically not used, but it
-% is allowed and encouraged for Computer Society conferences (but
-% not Computer Society journals). Most IEEE journals/conferences use
-% top floats exclusively. 
-% Note that, LaTeX2e, unlike IEEE journals/conferences, places
-% footnotes above bottom floats. This can be corrected via the
-% \fnbelowfloat command of the stfloats package.
-
-
-
+\section{Discussion} % Reflect on the created designs with images, analyse each graph's strengths and weaknesses, and explain future additions that can be helpful for the developers and end-users.
 
 \section{Conclusion}
 The conclusion goes here.
-
-
-
-
-
-% if have a single appendix:
-%\appendix[Proof of the Zonklar Equations]
-% or
-%\appendix  % for no appendix heading
-% do not use \section anymore after \appendix, only \section*
-% is possibly needed
-
-% use appendices with more than one appendix
-% then use \section to start each appendix
-% you must declare a \section before using any
-% \subsection or using \label (\appendices by itself
-% starts a section numbered zero.)
-%
-
-
-\appendices
-\section{Proof of the First Zonklar Equation}
-Appendix one text goes here.
-
-% you can choose not to have a title for an appendix
-% if you want by leaving the argument blank
-\section{}
-Appendix two text goes here.
 
 
 % use section* for acknowledgment
@@ -257,30 +146,11 @@ Appendix two text goes here.
 The authors would like to thank...
 
 
-% Can use something like this to put references on a page
-% by themselves when using endfloat and the captionsoff option.
-\ifCLASSOPTIONcaptionsoff
-  \newpage
-\fi
 
-
-
-% trigger a \newpage just before the given reference
-% number - used to balance the columns on the last page
-% adjust value as needed - may need to be readjusted if
-% the document is modified later
-%\IEEEtriggeratref{8}
-% The "triggered" command can be changed if desired:
-%\IEEEtriggercmd{\enlargethispage{-5in}}
-
-% references section
 
 \bibliographystyle{ieeetr}
 \bibliography{references}
 
-
-
-% that's all folks
 \end{document}
 
 
