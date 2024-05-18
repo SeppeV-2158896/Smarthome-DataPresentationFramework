@@ -95,8 +95,8 @@ class BrushChart extends Component {
     componentDidMount(){
     }
 
-    getSeriesNames(){
-      return this.state.serieNames
+    getSeries = () => {
+        return this.state.sets
     }
 
     toggleSeriesByName(name) {

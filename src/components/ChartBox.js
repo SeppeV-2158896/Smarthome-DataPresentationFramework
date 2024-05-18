@@ -3,14 +3,11 @@ import Papa from 'papaparse';
 import { parse } from 'date-fns';
 import ProduceConsumePlot from "./TODO/ProduceConsumePlot";
 import ProduceConsumePlotLines from "./TODO/ProduceConsumePlotLines"
-import EnergyTimePlot from "./TODO/EnergyTimePlot"
-import DotPlot from "./TODO/DotPlot";
 import EnergyBar from "./TODO/EnergyBar";
 import Chart from 'react-apexcharts';
 import ApexCharts from "apexcharts";
 import BrushChart from "./TODO/BrushChart";
 import TotalPlot from "./TODO/TotalPlot"
-import LiveChart from "./TODO/LiveChart";
 
 class Home extends Component {
     constructor(props) {
@@ -20,6 +17,8 @@ class Home extends Component {
             data: null,
             currentDate: null,
             sets: props.sets,
+            series: [],
+            colours: []
         };
 
         this.updateData = this.updateData.bind(this);
@@ -30,11 +29,11 @@ class Home extends Component {
 
     componentDidMount() {
         this.updateData();
+        this.render()
+    }
 
-        let inputs = document.querySelectorAll('.check');
-        for (let i = 0; i < inputs.length; i++) {
-            inputs[i].checked = true;
-        }
+    appendData(series, data) {
+        this.chartRef.current.appendData(series, data)
     }
 
     updateData(input_data) {
@@ -44,20 +43,55 @@ class Home extends Component {
         }
 
         this.chartRef.current.updateData(input_data);
+
         this.render()
+        
+        this.fetchSeriesData()
+
     }
 
-    getSeriesNamesFromChartRef = () => {
-
+    fetchSeriesData = () => {
         if (this.chartRef.current) {
-          return this.chartRef.current.getSeriesNames();
+          try {
+            const data = this.chartRef.current.getSeries();
+            // console.log(data)
+            if (data.sets){
+                this.setState({
+                    series: data.sets,
+                    colours: data.colours
+                });
+            }
+            
+          } catch (error) {
+            console.error("Failed to fetch series data:", error);
+          }
+        } else {
+          console.error("chartRef or getSeries function is not available");
         }
-        return [];      
     }
 
-    toggleSeries = (index) => {
-        console.log(index)
-        this.state.chart_ids.forEach((chart) => ApexCharts.exec(chart, "toggleSeries", this.getSeriesNamesFromChartRef()[index])) 
+    rgbaToHex = (rgba) => {
+        if (/^rgb/.test(rgba)) {
+            const rgbaValues = rgba.replace(/^rgba?\\(|\\s+|\\)$/g, '').split(',');
+            // Convert RGB to HEX
+            // eslint-disable-next-line no-bitwise
+            const hex = `#${((1 << 24) + (parseInt(rgbaValues[0], 10) << 16) + (parseInt(rgbaValues[1], 10) << 8) + parseInt(rgbaValues[2], 10)).toString(16).slice(1)}`;
+            // Add alpha channel
+            const alpha = Math.round(parseFloat(rgbaValues[3]) * 255).toString(16).padStart(2, '0');
+            return `${hex}${alpha}`;
+        }
+        return null; // Invalid input
+    }
+
+    toggleSeries = (seriesName, index) => {
+        this.fetchSeriesData()
+        this.chartRef.current.toggleSeries(seriesName)
+        // console.log(document.querySelectorAll('input[type="checkbox"]'))
+        // document.querySelectorAll('input[type="checkbox"]')[index].checked = !document.querySelectorAll('input[type="checkbox"]')[index].checked 
+    }
+
+    getChannelsFromRGBA = (string) => {
+        return string.substring(string.indexOf('(') + 1, string.lastIndexOf(')')).split(/,\s*/);
     }
 
     render() {
@@ -66,14 +100,33 @@ class Home extends Component {
                 case("ProduceConsumePlot"):
                     return (
                         <div>
-                            <div style={{height: "100%", width: "75%", float: "left", display: "inline-block"}}>
+                            <div style={{height: "100%", width: "67%", float: "left", display: "inline-block"}}>
                                 <ProduceConsumePlot ref={this.chartRef} data={this.state.data} sets={this.state.sets}/>
                             </div>
                             <div style={{foat: "right", display: "inline-block"}}>
-                                <div style={{height:"50%", width:"25%"}}>
-                                    Legend
+                                <div style={{height:"50%", width:"33%"}}>
+                                    <h2>Legend</h2>
+                                    <div>
+                                    {this.state.series && this.state.series.length > 0 ? (
+                                            this.state.series.map((seriesName, index) => (
+                                                <div key={index}>
+                                                    <label>
+                                                        <input 
+                                                            type="checkbox" 
+                                                            style={{ accentColor: (this.state.colours && this.state.colours[index]) ? this.state.colours[index] : 'blue' }} 
+                                                            onChange={() => this.toggleSeries(seriesName, index)}
+                                                            defaultChecked={true}
+                                                        />
+                                                        {seriesName}
+                                                    </label>
+                                                </div>
+                                            ))
+                                        ) : (
+                                            <div>No series data available.</div>
+                                        )}
+                                    </div>
                                 </div>
-                                <div style={{height:"50%", width:"25%"}}>
+                                <div style={{height:"50%", width:"33%"}}>
                                     Tools
                                 </div>
                             </div>
@@ -127,11 +180,11 @@ class Home extends Component {
                             </div>
                         </div>
                     )
-                case("LiveChart"):
+                case("EnergyBar"):
                     return (
                         <div height="400px">
                             <div style={{height: "100%", width: "75%", float: "left", display: "inline-block"}}>
-                                <LiveChart ref={this.chartRef} data={this.state.data} sets={this.state.sets}/>
+                                <EnergyBar ref={this.chartRef} data={this.state.data} sets={this.state.sets}/>
                             </div>
                             <div style={{foat: "right", display: "inline-block"}}>
                                 <div style={{height:"50%", width:"25%"}}>

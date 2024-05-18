@@ -1,3 +1,5 @@
+import { daysToWeeks } from "date-fns"
+
 class DataRepository {
     constructor(){
         
@@ -9,6 +11,7 @@ class DataRepository {
         let colours = []
         let widths = []
         let types = []
+        let sets = []
 
         // if there are uncertainty series specified in the set, and they are correctly formulated according to JSON, parse them
         if (set.uncertainty && JSON.parse(set.uncertainty)) {
@@ -63,6 +66,8 @@ class DataRepository {
 
                 types.push('solid')
 
+                sets.push(series.name)
+
             });
         };
 
@@ -71,6 +76,7 @@ class DataRepository {
             colours: colours,
             widths: widths,
             types: types,
+            sets: sets,
         }
     }
 
@@ -80,6 +86,7 @@ class DataRepository {
         let colours = []
         let widths = []
         let types = []
+        let sets = []
         
         // if there are uncertainty series specified in the set, and they are correctly formulated according to JSON, parse them
         if (set.uncertainty && JSON.parse(set.uncertainty)) {
@@ -156,7 +163,9 @@ class DataRepository {
                 types.push('solid')
                 types.push('solid')
 
-        
+                sets.push(series_up.name)
+                sets.push(series_down.name)
+
             });
         };
         
@@ -165,6 +174,7 @@ class DataRepository {
             colours: colours,
             widths: widths,
             types: types,
+            sets: sets,
         }
 
     }
@@ -259,7 +269,74 @@ class DataRepository {
             colours: colours,
             type: (set.gradient && set.gradient.enable) ? 'gradient' : 'solid',
             stops: stops,
+            sets: series.name
         }
+    }
+
+    static getBarSeriesFromData(input_data, set, index=0){
+
+        let all_data = []
+        let colours = []
+        let widths = []
+        let stops = []
+        let types = []
+
+        let series 
+        let unc
+
+        
+        if(set.x == null || set.y == null){
+            input_data = []
+        }
+
+        let uncertainties = DataRepository.getRangeSeriesFromUncertainty(input_data, set)
+
+        if (uncertainties.colours.length > 0){
+            unc = uncertainties.dataset[0].data.map((element) => ({
+                lower: element.y[0],
+                upper: element.y[1]
+            }))
+            colours.push(uncertainties.colours[0])
+            widths.push(uncertainties.widths[0])
+        }
+
+        let series_data = DataRepository.getSeriesFromData(input_data, set)
+
+        if (series_data.colours.length > 0){
+            series = series_data.dataset.data.map((element) => (
+             {
+
+                x: new Date(String(element.x)),
+                y: element.y
+             }
+            ))
+            colours.push(series_data.colours[0])
+            widths.push(series_data.widths[0])
+        }
+
+
+        let total = series.map((element, index) => (
+            {
+                x: element.x,
+                y: element.y,
+                upper: unc[index].upper,
+                lower: unc[index].lower
+            }
+        ))
+
+        return ({
+            data: total,
+            options: {
+                type: 'bar',
+                xKey: 'x',
+                yKey: 'y',
+                yName: series_data.dataset.name,
+                errorBars: {
+                    yLowerKey: 'lower',
+                    yUpperKey: 'upper',
+                },
+            }
+        })
     }
 }
 
