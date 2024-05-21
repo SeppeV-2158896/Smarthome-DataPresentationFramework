@@ -32,9 +32,12 @@ class ProduceConsumePlot extends Component{
                 xaxis: {
                   type: 'datetime',
                 },
-                
+                legend: {
+                  show: false
+                },
                 yaxis: {
-                  decimalsInFloat: 0
+                  decimalsInFloat: 2,
+                  forceNiceScale: true
                 },
                 noData: {
                   text: 'Loading...'
@@ -115,7 +118,7 @@ class ProduceConsumePlot extends Component{
 
         let dataseries = DataRepository.getSeriesFromData(input, set, 0, null, uncertainties.dataset[-1])
 
-        if (dataseries.colours.length > 0){
+        if ((dataseries.colours && dataseries.colours.length > 0) || (dataseries.stops && dataseries.stops.length > 0)){
           all_data.push(dataseries.dataset)
           colours.push(dataseries.colours)
           widths.push(dataseries.widths)

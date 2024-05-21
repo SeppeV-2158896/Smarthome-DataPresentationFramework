@@ -2,16 +2,24 @@ import React, { Component } from 'react';
 import DataRepository from '../DataRepository'
 import Chart, {
   Series,
-  ValueErrorBar
+  ValueErrorBar,
+  Title,
+  TickInterval,
+  ArgumentAxis
 } from 'devextreme-react/chart';
 
 class EnergyBar extends Component {
   constructor(props) {
     super(props);
 
+    console.log(props.title)
+
     this.state = {
       props: props,
       options: {
+        legend: {
+          visible: false,
+        },
         data: [],
         series: [],
       },
@@ -47,15 +55,17 @@ class EnergyBar extends Component {
         <Chart id="chart" dataSource={this.state.options.data}>
           <Series valueField="y"
             argumentField="x"
-            name="My oranges"
             type="bar"
             color="#ffaa66" >
-                    <ValueErrorBar
-                        highValueField="upper"
-                        lowValueField="lower"
-                        type="fixed"
-                    />
+              <ValueErrorBar
+                  highValueField="upper"
+                  lowValueField="lower"
+              />
           </Series>
+          <Title text={this.state.props.title ? this.state.props.title : 'Energy Production vs. Consumption'} />
+          <ArgumentAxis>
+            <TickInterval days={1} />
+          </ArgumentAxis>
         </Chart>
       </div>
     ) 

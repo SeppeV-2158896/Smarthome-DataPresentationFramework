@@ -11,7 +11,7 @@ class ProduceConsumePlotLines extends Component{
         this.state = {
             series: [],
             props: props,
-            serieNames: [],
+            sets: [],
             options: {
               chart: {
                 id: 'chart',
@@ -49,7 +49,7 @@ class ProduceConsumePlotLines extends Component{
                 },
                 tooltip: {
                     enabled: false,
-                }
+                },
               },
             }
 
@@ -75,23 +75,33 @@ class ProduceConsumePlotLines extends Component{
       let all_data = []
       let colours = []
       let widths = []
+      let stops = []
+      let types = []
 
       this.state.props.sets.forEach((set) => {
+        if(set.x == null || set.y == null){
+          input = []
+        }
+
         let uncertainties = DataRepository.getLineSeriesFromUncertainty(input, set)
-        let dataseries = DataRepository.getSeriesFromData(input, set)
 
-        console.log(dataseries)
-
-        if (uncertainties.dataset.length > 0){
+        if (uncertainties.sets.length > 0){
           uncertainties.dataset.forEach((series) => all_data.push(series))
           uncertainties.colours.forEach((colour) => colours.push(colour))
           uncertainties.widths.forEach((width) => widths.push(width))
+          uncertainties.types.forEach((type) => types.push(type))
+          uncertainties.sets.forEach((set) => this.state.sets.push(set))
         }
 
-        if (dataseries.dataset.data.length > 0){
+        let dataseries = DataRepository.getSeriesFromData(input, set, 0, null, uncertainties.dataset[-1])
+
+        if ((dataseries.colours && dataseries.colours.length > 0) || (dataseries.stops && dataseries.stops.length > 0)){
           all_data.push(dataseries.dataset)
           colours.push(dataseries.colours)
           widths.push(dataseries.widths)
+          stops = dataseries.stops
+          types.push(dataseries.type)
+          this.state.sets.push(dataseries.sets)
         }
         
       })
@@ -100,6 +110,16 @@ class ProduceConsumePlotLines extends Component{
         series: all_data,
         options: {
           colors: colours,
+          fill:{
+            type: types,
+            gradient: {
+              type: 'vertical',
+              shadeIntensity: 1,
+              opacityFrom: 1,
+              opacityTo: 1,
+              colorStops: stops
+            },
+          },
           stroke: {
             width: widths
           } 
@@ -109,6 +129,18 @@ class ProduceConsumePlotLines extends Component{
       this.render()
       
     }
+
+    getSeries = () => {
+      return {
+        sets: this.state.sets,
+        colours: this.state.options.colors
+      }
+    }
+
+    toggleSeries = (name) => {
+      ApexCharts.exec('chart', 'toggleSeries', name)
+    }
+
 
     render() {
         return (

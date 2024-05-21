@@ -151,11 +151,11 @@ class DataRepository {
                 all_data.push(series_up);
                 all_data.push(series_down);
 
-                if (set.gradient && set.gradient.enable) {
-                    colours = []                    
-                } else {
-                    colours.push(uncertainty.colour ? uncertainty.colour : `rgba(${Math.round(Math.random()*255)}, ${Math.round(Math.random()*255)}, ${Math.round(Math.random()*255)}, 0.7)`);
-                }
+                
+                colours.push(uncertainty.colour ? uncertainty.colour : `rgba(${Math.round(Math.random()*255)}, ${Math.round(Math.random()*255)}, ${Math.round(Math.random()*255)}, 0.7)`);
+            
+                colours.push(uncertainty.colour ? uncertainty.colour : `rgba(${Math.round(Math.random()*255)}, ${Math.round(Math.random()*255)}, ${Math.round(Math.random()*255)}, 0.7)`);
+                
                 
                 widths.push(set.uncertainty_width ? set.uncertainty_width : 2)
                 widths.push(set.uncertainty_width ? set.uncertainty_width : 2)
@@ -169,6 +169,8 @@ class DataRepository {
             });
         };
         
+        console.log(colours)
+
         return {
             dataset: all_data,
             colours: colours,
@@ -319,8 +321,8 @@ class DataRepository {
             {
                 x: element.x,
                 y: element.y,
-                upper: unc[index].upper,
-                lower: unc[index].lower
+                upper: unc[index].upper ? unc[index].upper: null,
+                lower: unc[index].lower ? unc[index].lower : null
             }
         ))
 
@@ -334,6 +336,7 @@ class DataRepository {
                 errorBars: {
                     yLowerKey: 'lower',
                     yUpperKey: 'upper',
+                    type: 'fixed'
                 },
             }
         })

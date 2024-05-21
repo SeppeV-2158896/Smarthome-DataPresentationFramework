@@ -13,33 +13,33 @@ class App extends Component {
     this.pageRef = React.createRef()
   }
 
-  handleMenuItemClick = (page) => {
-    this.state.currentPage = page;
-    this.renderPage()
-  };
+  // handleMenuItemClick = (page) => {
+  //   this.state.currentPage = page;
+  //   this.renderPage()
+  // };
 
   componentDidMount = () => {
-    this.renderPage()
+    // this.renderPage()
   }
 
-  renderPage = () => {
-    switch (String(this.state.currentPage)) {
-      case 'Home':
-        this.pageRef.current.update("ProduceConsumePlot")
-        break;
-      case 'Household':
-        this.pageRef.current.update("ProduceConsumePlotLines")
-        break;
-      case 'Technical':
-        this.pageRef.current.update("BrushChart")
-        break;
-      case 'Financial':
-        this.pageRef.current.update("ProduceConsumePlot")
-        break;
-      default:
-        return <Home width="1000px" />;
-    }
-  };
+  // renderPage = () => {
+  //   switch (String(this.state.currentPage)) {
+  //     case 'Home':
+  //       this.pageRef.current.update("ProduceConsumePlot")
+  //       break;
+  //     case 'Household':
+  //       this.pageRef.current.update("ProduceConsumePlotLines")
+  //       break;
+  //     case 'Technical':
+  //       this.pageRef.current.update("BrushChart")
+  //       break;
+  //     case 'Financial':
+  //       this.pageRef.current.update("ProduceConsumePlot")
+  //       break;
+  //     default:
+  //       return <Home width="1000px" />;
+  //   }
+  // };
 
   render() {
     return (
@@ -51,7 +51,7 @@ class App extends Component {
             ["Technical", "img/technical.svg"],
             ["Financial", "img/financial.svg"]
           ]}
-          onItemClick={this.handleMenuItemClick}
+          // onItemClick={this.handleMenuItemClick}
         />
         <section id='main-content' className="main-content">
           <Home ref={this.pageRef}/>

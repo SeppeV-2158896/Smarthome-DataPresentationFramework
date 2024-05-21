@@ -103,8 +103,7 @@ class Home extends Component {
                             <div style={{height: "100%", width: "67%", float: "left", display: "inline-block"}}>
                                 <ProduceConsumePlot ref={this.chartRef} data={this.state.data} sets={this.state.sets}/>
                             </div>
-                            <div style={{foat: "right", display: "inline-block"}}>
-                                <div style={{height:"50%", width:"33%"}}>
+                            <div style={{foat: "right", display: "inline-block", height:"50%", width:"33%"}}>
                                     <h2>Legend</h2>
                                     <div>
                                     {this.state.series && this.state.series.length > 0 ? (
@@ -125,11 +124,41 @@ class Home extends Component {
                                             <div>No series data available.</div>
                                         )}
                                     </div>
-                                </div>
-                                <div style={{height:"50%", width:"33%"}}>
-                                    Tools
-                                </div>
-                            </div>
+                                    <h2>Tools</h2>
+                                    <div>
+                                        <div>
+                                            <label>
+                                                <input 
+                                                    type="checkbox" 
+                                                    style={{ accentColor: "blue"}}
+                                                    defaultChecked={true}
+                                                />
+                                                Tooltip
+                                            </label> 
+                                        </div>
+                                        <div>
+                                            <label>
+                                                <input 
+                                                    type="checkbox" 
+                                                    style={{ accentColor: "blue"}}
+                                                    defaultChecked={false}
+                                                />
+                                                Datalabels
+                                            </label>
+                                        </div>
+                                        <div>
+                                            <label>
+                                                <input 
+                                                    type="checkbox" 
+                                                    style={{ accentColor: "blue"}}
+                                                    defaultChecked={true}
+                                                />
+                                                Zoom
+                                            </label>
+                                        </div>
+                                        
+                                        </div>
+                          </div>
                         </div>
                     )
                 case("ProduceConsumePlotLines"):

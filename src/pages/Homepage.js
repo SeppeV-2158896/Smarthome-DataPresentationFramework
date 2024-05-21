@@ -5,6 +5,7 @@ import ChartBox from "../components/ChartBox"
 import ApexCharts from "apexcharts";
 import EnergyBar from "../components/TODO/EnergyBar";
 import ProduceConsumePlot from "../components/TODO/ProduceConsumePlot";
+import ProduceConsumePlotLines from "../components/TODO/ProduceConsumePlotLines";
 
 class Home extends Component {
     constructor(props) {
@@ -21,8 +22,26 @@ class Home extends Component {
     }
 
     componentDidMount() {
-        this.loadData();
+        // this.loadData();
+        this.chartRef.current.updateData(this.getEnergyData());
         // this.setupAppendDataInterval(); // Call the function to setup interval for appending data
+    }
+
+    getEnergyData = () => {
+        return (
+            [
+              { "date_time": "2024-05-01 00:00:+02:00", "energy": 126.3, "uncertainty_lower": null, "uncertainty_upper": null },
+              { "date_time": "2024-05-02 00:00:+02:00", "energy": 115.6, "uncertainty_lower": null, "uncertainty_upper": null },
+              { "date_time": "2024-05-03 00:00:+02:00", "energy": 107.9, "uncertainty_lower": null, "uncertainty_upper": null },
+              { "date_time": "2024-05-04 00:00:+02:00", "energy": 135.0, "uncertainty_lower": null, "uncertainty_upper": null },
+              { "date_time": "2024-05-05 00:00:+02:00", "energy": 128.6, "uncertainty_lower": null, "uncertainty_upper": null },
+              { "date_time": "2024-05-06 00:00:+02:00", "energy": 129.4, "uncertainty_lower": null, "uncertainty_upper": null },
+              { "date_time": "2024-05-07 00:00:+02:00", "energy": 144.8, "uncertainty_lower": null, "uncertainty_upper": null },
+              { "date_time": "2024-05-08 00:00:+02:00", "energy": 138.86, "uncertainty_lower": 133.6, "uncertainty_upper": 141.9 },
+              { "date_time": "2024-05-09 00:00:+02:00", "energy": 138.7335, "uncertainty_lower": 130.6, "uncertainty_upper": 150.0 },
+              { "date_time": "2024-05-10 00:00:+02:00", "energy": 138.31, "uncertainty_lower": 137.0, "uncertainty_upper": 140.0 }
+            ]
+        )        
     }
 
     // Function to setup interval for calling appendData
@@ -35,7 +54,7 @@ class Home extends Component {
                 this.chartRef.current.appendData('Power Consumption Live over Time', { x: timestamp, y: y }); // Call appendData with random y value
                 currentIndex++;
             }
-        }, 1000); // Call appendData every minute
+        }, 500); // Call appendData every minute
     }
 
     
@@ -56,7 +75,9 @@ class Home extends Component {
                     power: item['electric heating element'],
                     power_2: item['fridge'],
                     '66p_up': item['fridge'] + item['fridge'] * Math.random() * 0.1,
-                    '66p_down': item['fridge'] - item['fridge'] * Math.random() * 0.1
+                    '66p_down': item['fridge'] - item['fridge'] * Math.random() * 0.1,
+                    washing_power: item['washing_machine'],
+                    socket: item['sockets']
                 };
 
                 dataset.push(formattedData);
@@ -123,30 +144,56 @@ class Home extends Component {
 
     render() {
         return (
-            <div id='canvas' style={{ width: "100%"}}>
-                <ChartBox style={{ width: "100%"}} ref={this.chartRef} type={"ProduceConsumePlot"} data={this.state.data} sets={[
+            <div>
+                {/* <div id='canvas' style={{ width: "50%"}}>
+                    <ChartBox ref={this.chartRef} type={"ProduceConsumePlot"} data={this.state.data} sets={[
+                        {
+                            x: 'time',
+                            y: 'power',
+                            title: 'Power Consumption Electric Heating over Time',
+                            colour: 'rgba(0,0,255,1)',
+                            legend_pos: 'top',
+                            consumption: false,
+                            radius: 2,
+                            uncertainty: '[{"value": "0.2", "title": "99p", "colour": "rgba(65,105,225, 0.3)"}]'
+                        },
+                        {
+                            title: 'Power Consumption Live over Time',
+                            colour: 'rgba(0,255,0,1)',
+                            legend_pos: 'top',
+                            consumption: false,
+                            radius: 2,
+                            // uncertainty: '[{"value": "0.2", "title": "99p", "colour": "rgba(65,105,225, 0.3)"}]'
+                        },
+
+                    ]} />
+                    <button type="button" onClick={this.loadPreviousData} style={{ width: 100 }}>Previous Period</button>
+                    <button type="button" onClick={this.loadNextData} style={{ width: 100 }}>Next Period</button>
+                </div> */}
+                <div id='canvas' style={{ width: "50%"}}>
+                <EnergyBar ref={this.chartRef} type={"ProduceConsumePlotLines"} data={this.getEnergyData()} title={'Daily energy consumption'} sets={[
                     {
-                        x: 'time',
-                        y: 'power',
-                        title: 'Power Consumption Electric Heating over Time',
-                        colour: 'rgba(0,0,255,1)',
+                        x: 'date_time',
+                        y: 'energy',
+                        // title: 'Daily energy consumption',
+                        // gradient: {
+                        //     enable: true,
+                        //     value: 40
+                        // },
                         legend_pos: 'top',
                         consumption: false,
                         radius: 2,
-                        uncertainty: '[{"value": "0.2", "title": "99p", "colour": "rgba(65,105,225, 0.3)"}]'
-                    },
-                    {
-                        title: 'Power Consumption Live over Time',
-                        colour: 'rgba(0,255,0,1)',
-                        legend_pos: 'top',
-                        consumption: false,
-                        radius: 2,
-                        // uncertainty: '[{"value": "0.2", "title": "99p", "colour": "rgba(65,105,225, 0.3)"}]'
-                    }
+                        uncertainty: '[{"title_up": "uncertainty_upper", "title_down": "uncertainty_lower", "colour": "rgba(95,158,160, 0.7)"}]'
+                },
+
                 ]} />
                 <button type="button" onClick={this.loadPreviousData} style={{ width: 100 }}>Previous Period</button>
                 <button type="button" onClick={this.loadNextData} style={{ width: 100 }}>Next Period</button>
             </div>
+        </div>
+
+
+
         );
     }
 }
@@ -180,10 +227,10 @@ export default Home;
 //         background: 'rgba(0,0,255,0.2)',
 //         legend_pos: 'top',
 //         consumption: false,
-//         gradient: {
-//             enable: true,
-//             value: 40
-//         },
+        // gradient: {
+        //     enable: true,
+        //     value: 40
+        // },
 //         radius: 2,
 //         uncertainty: '[{"value": "0.2", "title": "99p", "colour": "rgba(65,105,225, 0.3)"}]'
 //     },
