@@ -1,15 +1,11 @@
 import React, { Component } from "react";
-import Papa from 'papaparse';
-import { parse } from 'date-fns';
-import ProduceConsumePlot from "./TODO/ProduceConsumePlot";
-import ProduceConsumePlotLines from "./TODO/ProduceConsumePlotLines"
-import EnergyBar from "./TODO/EnergyBar";
-import Chart from 'react-apexcharts';
-import ApexCharts from "apexcharts";
-import BrushChart from "./TODO/BrushChart";
-import TotalPlot from "./TODO/TotalPlot"
+import LineAreaPlot from "../TODO/ProduceConsumePlot";
+import LineBorderPlot from "./LineBorderPlot"
+import BarPlot from "./BarPlot";
+import BrushChart from "./BrushChart";
+import StackedArea from "./StackedArea"
 
-class Home extends Component {
+class ChartBox extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -98,11 +94,11 @@ class Home extends Component {
     render() {
         if (this.state.type){
             switch(this.state.type){
-                case("ProduceConsumePlot"):
+                case("LineAreaPlot"):
                     return (
                         <div>
                             <div style={{height: "100%", width: "67%", float: "left", display: "inline-block"}}>
-                                <ProduceConsumePlot ref={this.chartRef} data={this.state.data} sets={this.state.sets}/>
+                                <LineAreaPlot ref={this.chartRef} data={this.state.data} sets={this.state.sets}/>
                             </div>
                             <div style={{foat: "right", display: "inline-block", height:"50%", width:"33%"}}>
                                     <h2>Legend</h2>
@@ -162,11 +158,11 @@ class Home extends Component {
                           </div>
                         </div>
                     )
-                case("ProduceConsumePlotLines"):
+                case("LineBorderPlot"):
                     return (
                         <div>
                             <div style={{height: "100%", width: "75%", float: "left", display: "inline-block"}}>
-                                <ProduceConsumePlotLines ref={this.chartRef} data={this.state.data} sets={this.state.sets}/>
+                                <LineBorderPlot ref={this.chartRef} data={this.state.data} sets={this.state.sets}/>
                             </div>
                             <div style={{foat: "right", display: "inline-block"}}>
                                 <div style={{height:"50%", width:"25%"}}>
@@ -194,11 +190,11 @@ class Home extends Component {
                             </div>
                         </div>
                     )
-                case("TotalPlot"):
+                case("StackedArea"):
                     return (
                         <div height="400px">
                             <div style={{height: "100%", width: "67%", float: "left", display: "inline-block"}}>
-                                <TotalPlot ref={this.chartRef} data={this.state.data} sets={this.state.sets} title={this.state.props.title}/>
+                                <StackedArea ref={this.chartRef} data={this.state.data} sets={this.state.sets} title={this.state.props.title}/>
                             </div>
                             <div style={{foat: "right", display: "inline-block", height:"50%", width:"33%"}}>
                                     <h2>Legend</h2>
@@ -258,11 +254,11 @@ class Home extends Component {
                           </div>
                         </div>
                     )
-                case("EnergyBar"):
+                case("BarPlot"):
                     return (
                         <div height="400px">
                             <div style={{height: "100%", width: "75%", float: "left", display: "inline-block"}}>
-                                <EnergyBar ref={this.chartRef} data={this.state.data} sets={this.state.sets}/>
+                                <BarPlot ref={this.chartRef} data={this.state.data} sets={this.state.sets}/>
                             </div>
                             <div style={{foat: "right", display: "inline-block"}}>
                                 <div style={{height:"50%", width:"25%"}}>
@@ -286,4 +282,4 @@ class Home extends Component {
     }
 }
 
-export default Home;
+export default ChartBox;

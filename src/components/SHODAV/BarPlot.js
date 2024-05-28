@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import DataRepository from '../DataRepository'
 import Chart, {
   Series,
@@ -7,8 +7,9 @@ import Chart, {
   TickInterval,
   ArgumentAxis
 } from 'devextreme-react/chart';
+import ChartComponent from './ChartComponent';
 
-class EnergyBar extends Component {
+class BarPlot extends ChartComponent {
   constructor(props) {
     super(props);
 
@@ -26,6 +27,8 @@ class EnergyBar extends Component {
     };
 
     this.updateData = this.updateData.bind(this);
+
+    this.chartRef = React.createRef()
   }
 
   updateData(newData) {
@@ -45,14 +48,44 @@ class EnergyBar extends Component {
   }
 
   componentDidMount() {
-    
+    return
+  }
+
+  appendData = (series, data) => {
+    let index = this.state.chartOptions.sets.indexOf(series)
+
+    if (this.state.series[index]){
+
+      this.state.brushOptions.series[index].data.push(data)
+      this.state.chartOptions.series[index].data.push(data)
+      
+      this.render()
+      window.dispatchEvent(new Event('resize'))
+      
+    }
+  }
+
+  getSeries = () => {
+    return {
+        sets: this.state.sets,
+        colours: this.state.options.colors
+    }
+  }
+
+  toggleSeries = (name) => {
+    const series = this.chartRef.getSeriesByName(name);
+    if (series.isVisible()) {
+        series.hide();
+    } else {
+        series.show();
+    }
   }
 
   render() {
     console.log(this.state.options)
     return (
       <div className="chart-wrapper" style={{ height: '100%' }}>
-        <Chart id="chart" dataSource={this.state.options.data}>
+        <Chart id="chart" dataSource={this.state.options.data} ref={this.chartRef}>
           <Series valueField="y"
             argumentField="x"
             type="bar"
@@ -72,4 +105,4 @@ class EnergyBar extends Component {
   }
 }
 
-export default EnergyBar;
+export default BarPlot;

@@ -1,9 +1,10 @@
-import React, { Component } from 'react';
+import React from 'react';
 import ReactApexChart from 'react-apexcharts';
 import DataRepository from '../DataRepository';
 import ApexCharts from 'apexcharts';
+import ChartComponent from './ChartComponent';
 
-class TotalPlot extends Component {
+class TotalPlot extends ChartComponent {
   constructor(props) {
     super(props);
 
@@ -59,6 +60,10 @@ class TotalPlot extends Component {
     }
   }
 
+  componentDidMount(){
+    return
+  }
+
   toggleSeries = (name) => {
     ApexCharts.exec('chart', 'toggleSeries', name)
   }
@@ -91,6 +96,19 @@ class TotalPlot extends Component {
         }
       }
     }));
+  }
+  
+  appendData = (series, data) => {
+    let index = this.state.sets.indexOf(series)
+
+    if (this.state.series[index]){
+
+      this.state.series[index].data.push(data)
+      
+      this.render()
+      window.dispatchEvent(new Event('resize'))
+      
+    }
   }
 
   render() {

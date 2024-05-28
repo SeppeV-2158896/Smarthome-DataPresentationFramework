@@ -3,7 +3,7 @@ import Papa from 'papaparse';
 import { parse } from 'date-fns';
 import ChartBox from "../components/ChartBox"
 import ApexCharts from "apexcharts";
-import EnergyBar from "../components/TODO/EnergyBar";
+import EnergyBar from "../components/SHODAV/BarPlot";
 import ProduceConsumePlot from "../components/TODO/ProduceConsumePlot";
 import ProduceConsumePlotLines from "../components/TODO/ProduceConsumePlotLines";
 import TotalPlot from "../components/TODO/TotalPlot";

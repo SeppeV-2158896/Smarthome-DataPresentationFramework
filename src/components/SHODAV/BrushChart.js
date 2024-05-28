@@ -1,9 +1,10 @@
-import React, {Component} from 'react';
+import React from 'react';
 import ReactApexChart from 'react-apexcharts';
 import ApexCharts from 'apexcharts';
 import DataRepository from '../DataRepository';
+import ChartComponent from './ChartComponent';
 
-class BrushChart extends Component {
+class BrushChart extends ChartComponent {
     constructor(props) {
         super(props);
 
@@ -97,15 +98,19 @@ class BrushChart extends Component {
     }
 
     componentDidMount(){
+        return
     }
 
     getSeries = () => {
-        return this.state.sets
+        return {
+            sets: this.state.sets,
+            colours: this.state.options.colors
+        }
     }
 
-    toggleSeriesByName(name) {
-      ApexCharts.exec('energy-production-vs-consumption', 'toggleSeries', name)
-      console.log("Doen")
+    toggleSeries = (name) => {
+        ApexCharts.exec('chart2', 'toggleSeries', name)
+        ApexCharts.exec('chart1', 'toggleSeries', name)
     }
 
     updateData(input){
@@ -169,6 +174,20 @@ class BrushChart extends Component {
       
     }
 
+    appendData = (series, data) => {
+        let index = this.state.chartOptions.sets.indexOf(series)
+  
+        if (this.state.series[index]){
+  
+          this.state.brushOptions.series[index].data.push(data)
+          this.state.chartOptions.series[index].data.push(data)
+          
+          this.render()
+          window.dispatchEvent(new Event('resize'))
+          
+        }
+    }
+
     render() {
         return (
           <div className="app" height="400px">
@@ -184,7 +203,8 @@ class BrushChart extends Component {
             </div>
           </div>
         );
-      }
+    }
+    
 
 }
 

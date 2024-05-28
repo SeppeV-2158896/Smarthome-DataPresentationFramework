@@ -1,9 +1,10 @@
-import React, {Component} from 'react';
+import React from 'react';
 import Chart from 'react-apexcharts';
 import ApexCharts from 'apexcharts';
 import DataRepository from '../DataRepository';
+import ChartComponent from './ChartComponent';
 
-class ProduceConsumePlotLines extends Component{
+class LineBorderPlot extends ChartComponent{
 
     constructor(props) {
         super(props);
@@ -60,15 +61,20 @@ class ProduceConsumePlotLines extends Component{
     }
 
     componentDidMount(){
+      return
     }
 
-    getSeriesNames(){
-      return this.state.serieNames
-    }
+    appendData = (series, data) => {
+      let index = this.state.sets.indexOf(series)
 
-    toggleSeriesByName(name) {
-      ApexCharts.exec('energy-production-vs-consumption', 'toggleSeries', name)
-      console.log("Doen")
+      if (this.state.series[index]){
+
+        this.state.series[index].data.push(data)
+
+        this.render()
+        window.dispatchEvent(new Event('resize'))
+        
+      }
     }
 
     updateData(input){
@@ -141,7 +147,6 @@ class ProduceConsumePlotLines extends Component{
       ApexCharts.exec('chart', 'toggleSeries', name)
     }
 
-
     render() {
         return (
           <div className="app">
@@ -156,8 +161,8 @@ class ProduceConsumePlotLines extends Component{
             </div>
           </div>
         );
-      }
+    }
 
 }
 
-export default ProduceConsumePlotLines
+export default LineBorderPlot
