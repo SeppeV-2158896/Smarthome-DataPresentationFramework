@@ -6,6 +6,8 @@ import ApexCharts from "apexcharts";
 import EnergyBar from "../components/TODO/EnergyBar";
 import ProduceConsumePlot from "../components/TODO/ProduceConsumePlot";
 import ProduceConsumePlotLines from "../components/TODO/ProduceConsumePlotLines";
+import TotalPlot from "../components/TODO/TotalPlot";
+import BrushChart from "../components/TODO/BrushChart";
 
 class Home extends Component {
     constructor(props) {
@@ -22,8 +24,8 @@ class Home extends Component {
     }
 
     componentDidMount() {
-        // this.loadData();
-        this.chartRef.current.updateData(this.getEnergyData());
+        this.loadData();
+        // this.chartRef.current.updateData(this.getEnergyData());
         // this.setupAppendDataInterval(); // Call the function to setup interval for appending data
     }
 
@@ -77,7 +79,9 @@ class Home extends Component {
                     '66p_up': item['fridge'] + item['fridge'] * Math.random() * 0.1,
                     '66p_down': item['fridge'] - item['fridge'] * Math.random() * 0.1,
                     washing_power: item['washing_machine'],
-                    socket: item['sockets']
+                    socket: item['sockets'],
+                    heating: item['electric heating element'],
+                    tv: item['television']
                 };
 
                 dataset.push(formattedData);
@@ -85,7 +89,8 @@ class Home extends Component {
                 if (dataset.length > 1440 && !loaded) {
                     loaded = true;
                     console.log(dataset)
-                    this.chartRef.current.updateData(dataset.filter((data) => data.time.getDate() === dataset[0].time.getDate()));
+                    // this.chartRef.current.updateData(dataset.filter((data) => data.time.getDate() === dataset[0].time.getDate()));
+                    this.chartRef.current.updateData(dataset)
                     this.setState({
                         data: dataset,
                         currentDate: dataset[0].time
@@ -171,20 +176,48 @@ class Home extends Component {
                     <button type="button" onClick={this.loadNextData} style={{ width: 100 }}>Next Period</button>
                 </div> */}
                 <div id='canvas' style={{ width: "50%"}}>
-                <EnergyBar ref={this.chartRef} type={"ProduceConsumePlotLines"} data={this.getEnergyData()} title={'Daily energy consumption'} sets={[
+                <ProduceConsumePlot ref={this.chartRef} type={"BrushChart"} data={this.state.data} title={'Total power consumption'} sets={[
                     {
-                        x: 'date_time',
-                        y: 'energy',
+                        x: 'time',
+                        y: 'tv',
+                        title: 'Power Consumption TV over Time',
                         // title: 'Daily energy consumption',
                         // gradient: {
                         //     enable: true,
                         //     value: 40
                         // },
                         legend_pos: 'top',
+                        colour: 'rgba(0,0,255,1)',
                         consumption: false,
                         radius: 2,
-                        uncertainty: '[{"title_up": "uncertainty_upper", "title_down": "uncertainty_lower", "colour": "rgba(95,158,160, 0.7)"}]'
-                },
+                        uncertainty: '[{"value": "0.2", "title": "99p", "colour": "rgba(65,105,225, 0.3)"},{"value": "0.01", "title": "67p", "colour": "rgba(65,105,225, 0.5)"},{"value": "0.05", "title": "50p", "colour": "rgba(65,105,225, 0.7)"} ]'
+                     },{
+                        x: 'time',
+                        y: 'power_2',
+                        title: 'Power Consumption Fridge over Time',
+                        colour: 'rgba(95,158,160,1)',
+                        legend_pos: 'top',
+                        consumption: false,
+                        uncertainty: '[{"title_up": "66p_up", "title_down": "66p_down", "colour": "rgba(95,158,160, 0.7)"}]'
+                    },
+                //     x: 'time',
+                //     y: 'power_2',
+                //     title: 'Power Consumption Fridge over Time',
+                //     // colour: 'rgba(0,0,255,1)',
+                //     legend_pos: 'top',
+                //     consumption: false,
+                //     radius: 2,
+                //     // uncertainty: '[{"value": "0.2", "title": "99p", "colour": "rgba(65,105,225, 0.3)"}]'
+                // },{
+                //     x: 'time',
+                //     y: 'washing_power',
+                //     title: 'Power Consumption Washing over Time',
+                //     // colour: 'rgba(0,0,255,1)',
+                //     legend_pos: 'top',
+                //     consumption: false,
+                //     radius: 2,
+                //     // uncertainty: '[{"value": "0.2", "title": "99p", "colour": "rgba(65,105,225, 0.3)"}]'
+                // },
 
                 ]} />
                 <button type="button" onClick={this.loadPreviousData} style={{ width: 100 }}>Previous Period</button>

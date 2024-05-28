@@ -13,6 +13,7 @@ class Home extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            props: props,
             type: props.type,
             data: null,
             currentDate: null,
@@ -181,7 +182,7 @@ class Home extends Component {
                     return (
                         <div height="400px">
                             <div style={{height: "100%", width: "75%", float: "left", display: "inline-block"}}>
-                                <BrushChart ref={this.chartRef} data={this.state.data} sets={this.state.sets}/>
+                                <BrushChart ref={this.chartRef} data={this.state.data} sets={this.state.sets} title={this.state.props.title}/>
                             </div>
                             <div style={{foat: "right", display: "inline-block"}}>
                                 <div style={{height:"50%", width:"25%"}}>
@@ -196,17 +197,65 @@ class Home extends Component {
                 case("TotalPlot"):
                     return (
                         <div height="400px">
-                            <div style={{height: "100%", width: "75%", float: "left", display: "inline-block"}}>
-                                <TotalPlot ref={this.chartRef} data={this.state.data} sets={this.state.sets}/>
+                            <div style={{height: "100%", width: "67%", float: "left", display: "inline-block"}}>
+                                <TotalPlot ref={this.chartRef} data={this.state.data} sets={this.state.sets} title={this.state.props.title}/>
                             </div>
-                            <div style={{foat: "right", display: "inline-block"}}>
-                                <div style={{height:"50%", width:"25%"}}>
-                                    Legend
-                                </div>
-                                <div style={{height:"50%", width:"25%"}}>
-                                    Tools
-                                </div>
-                            </div>
+                            <div style={{foat: "right", display: "inline-block", height:"50%", width:"33%"}}>
+                                    <h2>Legend</h2>
+                                    <div>
+                                    {this.state.series && this.state.series.length > 0 ? (
+                                            this.state.series.map((seriesName, index) => (
+                                                <div key={index}>
+                                                    <label>
+                                                        <input 
+                                                            type="checkbox" 
+                                                            style={{ accentColor: (this.state.colours && this.state.colours[index]) ? this.state.colours[index] : 'blue' }} 
+                                                            onChange={() => this.toggleSeries(seriesName, index)}
+                                                            defaultChecked={true}
+                                                        />
+                                                        {seriesName}
+                                                    </label>
+                                                </div>
+                                            ))
+                                        ) : (
+                                            <div>No series data available.</div>
+                                        )}
+                                    </div>
+                                    <h2>Tools</h2>
+                                    <div>
+                                        <div>
+                                            <label>
+                                                <input 
+                                                    type="checkbox" 
+                                                    style={{ accentColor: "blue"}}
+                                                    defaultChecked={true}
+                                                />
+                                                Tooltip
+                                            </label> 
+                                        </div>
+                                        <div>
+                                            <label>
+                                                <input 
+                                                    type="checkbox" 
+                                                    style={{ accentColor: "blue"}}
+                                                    defaultChecked={false}
+                                                />
+                                                Datalabels
+                                            </label>
+                                        </div>
+                                        <div>
+                                            <label>
+                                                <input 
+                                                    type="checkbox" 
+                                                    style={{ accentColor: "blue"}}
+                                                    defaultChecked={true}
+                                                />
+                                                Zoom
+                                            </label>
+                                        </div>
+                                        
+                                        </div>
+                          </div>
                         </div>
                     )
                 case("EnergyBar"):

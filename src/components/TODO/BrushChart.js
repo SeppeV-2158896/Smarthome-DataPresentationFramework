@@ -51,6 +51,11 @@ class BrushChart extends Component {
                         show: false
                     }
                 },
+                title: {
+                    enabled: props.enable_title ? false : true,
+                    text: props.title ? props.title : 'Energy Production vs. Consumption',
+                    align: 'left'
+                  },
                 colors: [],
                 stroke: {
                     width: [],
@@ -87,7 +92,6 @@ class BrushChart extends Component {
         }
 
         this.updateData=this.updateData.bind(this);
-        this.getSeriesNames=this.getSeriesNames.bind(this);
         this.toggleSeriesByName = this.toggleSeriesByName.bind(this);
 
     }
